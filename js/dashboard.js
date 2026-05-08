@@ -27,6 +27,7 @@ function renderWatchItems(filter = "All") {
     card.innerHTML = `
       <p class="card-meta">${item.type} • ${item.platform}</p>
       <h3>${item.title}</h3>
+      <p class="status-badge">${item.status}</p>
       <p>${item.notes}</p>
 
       <div class="tag-row">

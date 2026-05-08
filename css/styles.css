@@ -196,6 +196,18 @@ a {
   margin-bottom: 12px;
 }
 
+.status-badge {
+  display: inline-block;
+  background: #2c2738;
+  border: 1px solid #403a4f;
+  border-radius: 999px;
+  color: #f8f4ec;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+}
+
 .filter-row {
   display: flex;
   flex-wrap: wrap;
