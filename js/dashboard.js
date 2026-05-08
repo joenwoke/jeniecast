@@ -40,7 +40,14 @@ function renderWatchItems(filter = "All") {
         ${item.moods.map(mood => `<span>${mood}</span>`).join("")}
       </div>
 
-      <button class="delete-btn" type="button" data-id="${item.id}" aria-label="Delete ${item.title}" title="Delete">&#128465;</button>
+      <button class="delete-btn" type="button" data-id="${item.id}" aria-label="Delete ${item.title}" title="Delete">
+        <svg class="delete-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 3h6l1 2h4v2H4V5h4l1-2Z"></path>
+          <path d="M6 9h12l-1 12H7L6 9Z"></path>
+          <path d="M10 11v8"></path>
+          <path d="M14 11v8"></path>
+        </svg>
+      </button>
     `;
 
     // Append the card to the watch grid
