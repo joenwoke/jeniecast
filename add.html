@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add to JeNieCast</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="logo">JeNieCast</a>
+
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="add.html">Add Watch</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <h1>Add something to watch</h1>
+      <p>Save a movie, show, YouTube video, anime, documentary, or even something you forgot the name of.</p>
+    </section>
+
+    <form id="addWatchForm" class="form">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input id="title" type="text" placeholder="Example: The Office" required />
+      </div>
+
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" required>
+          <option value="">Choose type</option>
+          <option value="Movie">Movie</option>
+          <option value="Series">Series</option>
+          <option value="YouTube">YouTube</option>
+          <option value="Anime">Anime</option>
+          <option value="Documentary">Documentary</option>
+          <option value="Unknown">Unknown / Forgot Title</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="platform">Platform</label>
+        <input id="platform" type="text" placeholder="Netflix, YouTube, TikTok, Prime Video..." required />
+      </div>
+
+      <div class="form-group">
+        <label for="moods">Mood tags</label>
+        <input id="moods" type="text" placeholder="Eating, Funny, Comfort" required />
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" required>
+          <option value="">Choose status</option>
+          <option value="Want to Watch">Want to Watch</option>
+          <option value="Watching">Watching</option>
+          <option value="Finished">Finished</option>
+          <option value="Rewatchable">Rewatchable</option>
+          <option value="Saved Idea">Saved Idea</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="Why did you save this? Where did you see it?"></textarea>
+      </div>
+
+      <button type="submit" class="btn primary-btn full-width">Save to JeNieCast</button>
+    </form>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/add.js"></script>
+</body>
+</html>

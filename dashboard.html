@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JeNieCast Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a href="index.html" class="logo">JeNieCast</a>
+
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="add.html">Add Watch</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <h1>Your watch dashboard</h1>
+      <p>Filter your saved movies, shows, videos, and comfort rewatches by mood.</p>
+    </section>
+
+    <section class="filter-row">
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="Eating">Eating</button>
+      <button class="filter-btn" data-filter="Funny">Funny</button>
+      <button class="filter-btn" data-filter="Comfort">Comfort</button>
+      <button class="filter-btn" data-filter="Action">Action</button>
+      <button class="filter-btn" data-filter="Need to Identify">Need to Identify</button>
+    </section>
+
+    <section id="watchGrid" class="grid"></section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
