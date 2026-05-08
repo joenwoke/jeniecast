@@ -40,7 +40,7 @@ function renderWatchItems(filter = "All") {
         ${item.moods.map(mood => `<span>${mood}</span>`).join("")}
       </div>
 
-      <button class="delete-btn" type="button" data-id="${item.id}">Delete</button>
+      <button class="delete-btn" type="button" data-id="${item.id}" aria-label="Delete ${item.title}" title="Delete">&#128465;</button>
     `;
 
     // Append the card to the watch grid

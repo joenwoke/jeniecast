@@ -209,15 +209,20 @@ a {
 }
 
 .delete-btn {
+  align-items: center;
   background: transparent;
   border: 1px solid #5a2630;
-  border-radius: 999px;
+  border-radius: 50%;
   color: #ff9aa8;
   cursor: pointer;
+  display: inline-flex;
   font-size: 0.85rem;
   font-weight: 700;
+  height: 36px;
+  justify-content: center;
   margin-top: 20px;
-  padding: 8px 12px;
+  padding: 0;
+  width: 36px;
 }
 
 .delete-btn:hover {
