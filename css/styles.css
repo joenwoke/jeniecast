@@ -106,6 +106,7 @@ a {
 }
 
 .secondary-btn {
+  background: transparent;
   border: 1px solid #403a4f;
   color: #f8f4ec;
 }
