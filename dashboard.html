@@ -33,6 +33,58 @@
       <button class="filter-btn" data-filter="Need to Identify">Need to Identify</button>
     </section>
 
+    <form id="editWatchForm" class="form edit-form" hidden>
+      <h2>Edit watch item</h2>
+
+      <div class="form-group">
+        <label for="editTitle">Title</label>
+        <input id="editTitle" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label for="editType">Type</label>
+        <select id="editType" required>
+          <option value="Movie">Movie</option>
+          <option value="Series">Series</option>
+          <option value="YouTube">YouTube</option>
+          <option value="Anime">Anime</option>
+          <option value="Documentary">Documentary</option>
+          <option value="Unknown">Unknown / Forgot Title</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="editPlatform">Platform</label>
+        <input id="editPlatform" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label for="editMoods">Mood tags</label>
+        <input id="editMoods" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label for="editStatus">Status</label>
+        <select id="editStatus" required>
+          <option value="Want to Watch">Want to Watch</option>
+          <option value="Watching">Watching</option>
+          <option value="Finished">Finished</option>
+          <option value="Rewatchable">Rewatchable</option>
+          <option value="Saved Idea">Saved Idea</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="editNotes">Notes</label>
+        <textarea id="editNotes"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary-btn">Save Changes</button>
+        <button id="cancelEditBtn" type="button" class="btn secondary-btn">Cancel</button>
+      </div>
+    </form>
+
     <section id="watchGrid" class="grid"></section>
   </main>
 
