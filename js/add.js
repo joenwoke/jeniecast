@@ -16,6 +16,7 @@ addWatchForm.addEventListener("submit", event => {
     .filter(mood => mood !== "");
 
   const newWatchItem = {
+    id: createWatchItemId(),
     title,
     type,
     platform,

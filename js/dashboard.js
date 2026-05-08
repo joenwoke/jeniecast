@@ -2,8 +2,10 @@ const watchGrid = document.querySelector("#watchGrid");
 const filterButtons = document.querySelectorAll(".filter-btn");
 
 let watchItems = getWatchItems();
+let currentFilter = "All";
 
 function renderWatchItems(filter = "All") {
+  currentFilter = filter;
   watchGrid.innerHTML = "";
 
   const filteredItems = filter === "All"
@@ -33,11 +35,24 @@ function renderWatchItems(filter = "All") {
       <div class="tag-row">
         ${item.moods.map(mood => `<span>${mood}</span>`).join("")}
       </div>
+
+      <button class="delete-btn" type="button" data-id="${item.id}">Delete</button>
     `;
 
     watchGrid.appendChild(card);
   });
 }
+
+watchGrid.addEventListener("click", event => {
+  if (!event.target.classList.contains("delete-btn")) {
+    return;
+  }
+
+  const itemId = event.target.dataset.id;
+  watchItems = watchItems.filter(item => item.id !== itemId);
+  saveWatchItems(watchItems);
+  renderWatchItems(currentFilter);
+});
 
 filterButtons.forEach(button => {
   button.addEventListener("click", () => {

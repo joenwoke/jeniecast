@@ -208,6 +208,23 @@ a {
   padding: 6px 10px;
 }
 
+.delete-btn {
+  background: transparent;
+  border: 1px solid #5a2630;
+  border-radius: 999px;
+  color: #ff9aa8;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 20px;
+  padding: 8px 12px;
+}
+
+.delete-btn:hover {
+  background: #5a2630;
+  color: #ffffff;
+}
+
 .filter-row {
   display: flex;
   flex-wrap: wrap;
