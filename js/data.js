@@ -28,12 +28,18 @@ const starterWatchItems = [
   }
 ];
 
+const watchItemsKey = "jeniecastItems";
+// Key to track if starter cards have been loaded into localStorage to prevent duplicates 
+const starterItemsLoadedKey = "jeniecastStarterItemsLoaded";
+
 function createWatchItemId() {
   return `watch-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function getWatchItems() {
-  const savedItems = localStorage.getItem("jeniecastItems");
+  // Check if there are saved items in localStorage and if the starter items have aleady been loaded to prevent duplicates. 
+  const savedItems = localStorage.getItem(watchItemsKey);
+  const starterItemsLoaded = localStorage.getItem(starterItemsLoadedKey);
 
   if (savedItems) {
     const parsedItems = JSON.parse(savedItems);
@@ -52,10 +58,17 @@ function getWatchItems() {
     return itemsWithIds;
   }
 
-  localStorage.setItem("jeniecastItems", JSON.stringify(starterWatchItems));
+  // If no save items and starter items have been loaded, return an empty array. Starter items only load once. 
+  if (starterItemsLoaded) {
+    return [];
+  }
+
+  localStorage.setItem(watchItemsKey, JSON.stringify(starterWatchItems));
+  localStorage.setItem(starterItemsLoadedKey, "true");
   return starterWatchItems;
 }
 
 function saveWatchItems(items) {
-  localStorage.setItem("jeniecastItems", JSON.stringify(items));
+  localStorage.setItem(watchItemsKey, JSON.stringify(items));
+  localStorage.setItem(starterItemsLoadedKey, "true");
 }
