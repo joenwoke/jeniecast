@@ -94,8 +94,8 @@ function createStatCard(label, value) {
 
 function renderDashboardStats(visibleCount) {
   const stats = [
-    { label: "Total saved", value: watchItems.length },
-    { label: "Visible", value: visibleCount },
+    { label: "All", value: watchItems.length },
+    { label: "Showing", value: visibleCount },
     { label: "Want to Watch", value: getStatusCount("Want to Watch") },
     { label: "Watching", value: getStatusCount("Watching") },
     { label: "Finished", value: getStatusCount("Finished") },
