@@ -49,6 +49,7 @@ function hideEditForm() {
   editWatchForm.hidden = true;
 }
 
+// Function to create an SVG icon element with the specified paths
 function createSvgIcon(paths) {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("action-icon");
@@ -64,6 +65,7 @@ function createSvgIcon(paths) {
   return svg;
 }
 
+// Function to create an icon button with the specified class, label, item ID, and SVG paths for the icon
 function createIconButton(className, label, itemId, iconPaths) {
   const button = document.createElement("button");
   button.classList.add("icon-btn", className);
@@ -76,14 +78,15 @@ function createIconButton(className, label, itemId, iconPaths) {
   return button;
 }
 
-function createEmptyStateCard() {
+// Function to create a card element for an empty state with a title and message
+function createEmptyStateCard(titleText, messageText) {
   const card = document.createElement("div");
   const heading = document.createElement("h3");
   const message = document.createElement("p");
 
   card.classList.add("watch-card");
-  heading.textContent = "No matches found";
-  message.textContent = "Add more watch items or try a different mood filter.";
+  heading.textContent = titleText;
+  message.textContent = messageText;
 
   card.appendChild(heading);
   card.appendChild(message);
@@ -91,6 +94,7 @@ function createEmptyStateCard() {
   return card;
 }
 
+// Function to create a card element for a watch item
 function createWatchCard(item) {
   const card = document.createElement("article");
   const meta = document.createElement("p");
@@ -110,26 +114,31 @@ function createWatchCard(item) {
     "M14 11v8"
   ]);
 
+  // Add appropriate classes to the card elements for styling
   card.classList.add("watch-card");
   meta.classList.add("card-meta");
   status.classList.add("status-badge");
   tagRow.classList.add("tag-row");
   cardActions.classList.add("card-actions");
 
+  // Set the content of the card elements based on the watch item data
   meta.textContent = `${item.type} • ${item.platform}`;
   title.textContent = item.title;
   status.textContent = item.status;
   notes.textContent = item.notes;
 
+  // Create tags for each mood associated with the item
   item.moods.forEach(mood => {
     const tag = document.createElement("span");
     tag.textContent = mood;
     tagRow.appendChild(tag);
   });
 
+  // Append edit and delete buttons to the card actions container
   cardActions.appendChild(editButton);
   cardActions.appendChild(deleteButton);
 
+  // Append all elements to the card
   card.appendChild(meta);
   card.appendChild(title);
   card.appendChild(status);
@@ -159,6 +168,42 @@ function itemMatchesSearch(item, searchTerm) {
   return searchableText.includes(searchTerm);
 }
 
+// Function to determine the appropriate empty state content based on the current filter and search term
+function getEmptyStateContent(filter, searchTerm) {
+  if (watchItems.length === 0) {
+    return {
+      title: "Your watchlist is empty",
+      message: "Add something to start building your personal watchlist."
+    };
+  }
+
+  if (filter !== "All" && searchTerm) {
+    return {
+      title: `No matches in ${filter}`,
+      message: "Try a different search term or switch to another mood filter."
+    };
+  }
+
+  if (searchTerm) {
+    return {
+      title: "No search results",
+      message: "Try searching by title, platform, mood, status, or notes."
+    };
+  }
+
+  if (filter !== "All") {
+    return {
+      title: `No ${filter} matches`,
+      message: "Add more watch items or try a different mood filter."
+    };
+  }
+
+  return {
+    title: "No matches found",
+    message: "Add more watch items or try a different mood filter."
+  };
+}
+
 // Function to retrieve watch items from localStorage
 function renderWatchItems(filter = "All") {
   currentFilter = filter;
@@ -173,7 +218,9 @@ function renderWatchItems(filter = "All") {
 
   // If no items match the filter, show a friendly message 
   if (filteredItems.length === 0) {
-    watchGrid.appendChild(createEmptyStateCard());
+    // Get the appropriate empty state content based on the current filter and search term
+    const emptyState = getEmptyStateContent(filter, searchTerm);
+    watchGrid.appendChild(createEmptyStateCard(emptyState.title, emptyState.message));
     return;
   }
 
