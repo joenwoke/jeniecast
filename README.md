@@ -51,6 +51,29 @@ If stored data is corrupted or is not an array, the app repairs the watchlist ba
 
 This is good for early development, but it is not a replacement for real accounts or shared storage. A future version should move user data to a backend database with authentication.
 
+## Production Smoke Test
+
+Deployed app: `https://jeniecast.vercel.app`
+
+Use this checklist after deploying changes:
+
+- Open the deployed app and confirm the homepage loads.
+- Open the dashboard.
+- Add a new watch item with a new mood tag.
+- Confirm the new item appears on the dashboard.
+- Confirm the new mood tag appears as a filter.
+- Search for the new item, then clear the search.
+- Sort by title, platform, status, and recently added.
+- Edit the item and confirm the dashboard updates.
+- Try to save a duplicate title and platform, and confirm it is blocked.
+- Export the watchlist as JSON.
+- Import a valid JSON watchlist and confirm the inline success message appears.
+- Try importing invalid JSON and confirm the inline error message appears.
+- Delete an item and confirm the delete prompt appears.
+- Refresh the page and confirm saved data still appears.
+
+Current data is stored in each browser's `localStorage`, so smoke tests affect only the browser and device being used.
+
 ## Future Direction
 
 Planned improvements include:
