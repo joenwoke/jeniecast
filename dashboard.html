@@ -45,6 +45,15 @@
           <option value="platform">Platform</option>
         </select>
       </div>
+
+      <div class="backup-row">
+        <span>Backup</span>
+        <div class="backup-actions">
+          <button id="exportWatchlistBtn" class="backup-btn" type="button">Export JSON</button>
+          <button id="importWatchlistBtn" class="backup-btn" type="button">Import JSON</button>
+          <input id="importWatchlistInput" type="file" accept="application/json,.json" hidden />
+        </div>
+      </div>
     </div>
 
     <form id="editWatchForm" class="form edit-form" hidden>

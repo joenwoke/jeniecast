@@ -13,6 +13,7 @@ JeNieCast is a HTML, CSS, and JavaScript web app for saving movies, shows, video
 - Build mood filter buttons from the tags saved on watch items.
 - Edit saved items.
 - Delete saved items with a confirmation prompt.
+- Export and import watchlists as JSON for backup.
 - Show a random saved item as the homepage "Tonight's Genie Pick".
 - Show different empty-state messages for empty watchlists, filters, and searches.
 - Store data in the browser with `localStorage`.
@@ -57,4 +58,3 @@ Planned improvements include:
 - Shared or cloud-synced watchlists.
 - Better recommendation logic.
 - More dashboard filters.
-- Optional import/export.

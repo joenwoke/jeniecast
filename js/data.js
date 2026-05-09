@@ -81,6 +81,24 @@ function createCreatedAt() {
   return Date.now();
 }
 
+function normalizeWatchItems(items) {
+  return items.map((item, index) => {
+    const watchItem = item && typeof item === "object" ? item : {};
+
+    return {
+      ...watchItem,
+      id: watchItem.id || createWatchItemId(),
+      createdAt: watchItem.createdAt || index + 1,
+      title: watchItem.title || "Untitled",
+      type: watchItem.type || "Unknown",
+      platform: watchItem.platform || "Unknown",
+      moods: Array.isArray(watchItem.moods) ? watchItem.moods : [],
+      status: watchItem.status || "Saved Idea",
+      notes: watchItem.notes || ""
+    };
+  });
+}
+
 function getWatchItems() {
   // Check if there are saved items in localStorage and if the starter items have aleady been loaded to prevent duplicates. 
   const savedItems = localStorage.getItem(watchItemsKey);
@@ -101,13 +119,7 @@ function getWatchItems() {
       return [];
     }
 
-    const itemsWithIds = parsedItems.map((item, index) => {
-      return {
-        ...item,
-        id: item.id || createWatchItemId(),
-        createdAt: item.createdAt || index + 1
-      };
-    });
+    const itemsWithIds = normalizeWatchItems(parsedItems);
 
     saveWatchItems(itemsWithIds);
     return itemsWithIds;

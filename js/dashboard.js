@@ -4,6 +4,9 @@ const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
 const dashboardSort = document.querySelector("#dashboardSort");
+const exportWatchlistBtn = document.querySelector("#exportWatchlistBtn");
+const importWatchlistBtn = document.querySelector("#importWatchlistBtn");
+const importWatchlistInput = document.querySelector("#importWatchlistInput");
 const editWatchForm = document.querySelector("#editWatchForm");
 const editTitle = document.querySelector("#editTitle");
 const editType = document.querySelector("#editType");
@@ -75,6 +78,57 @@ function renderFilterButtons() {
 // Function to update visibility of the clear search button based on whether there is a current search term
 function updateClearSearchButton() {
   clearSearchBtn.hidden = currentSearchTerm === "";
+}
+
+// Function to refresh the dashboard by re-rendering filter buttons and watch items with the current filter
+function refreshDashboard() {
+  renderFilterButtons();
+  renderWatchItems(currentFilter);
+}
+// Function to generate a filename for exporting the watchlist with the current date
+function getExportFileName() {
+  const today = new Date().toISOString().slice(0, 10);
+  return `jeniecast-watchlist-${today}.json`;
+}
+// Function to export the watchlist as a JSON file for the user to download
+function exportWatchlist() {
+  const watchlistJson = JSON.stringify(watchItems, null, 2);
+  const blob = new Blob([watchlistJson], { type: "application/json" });
+  const downloadUrl = URL.createObjectURL(blob);
+  const downloadLink = document.createElement("a");
+
+  downloadLink.href = downloadUrl;
+  downloadLink.download = getExportFileName();
+  downloadLink.click();
+  URL.revokeObjectURL(downloadUrl);
+}
+// Function to import a watchlist from a JSON file selected by the user
+function importWatchlist(file) {
+  const reader = new FileReader();
+
+  reader.addEventListener("load", () => {
+    let importedItems;
+
+    try {
+      importedItems = JSON.parse(reader.result);
+    } catch (error) {
+      window.alert("That file is not valid JSON.");
+      return;
+    }
+
+    if (!Array.isArray(importedItems)) {
+      window.alert("Import failed. The JSON file must contain a watchlist array.");
+      return;
+    }
+    // Normalize the imported items to ensure they have all required fields and valid data, then save and refresh the dashboard
+    watchItems = normalizeWatchItems(importedItems);
+    saveWatchItems(watchItems);
+    hideEditForm();
+    refreshDashboard();
+    window.alert("Watchlist imported successfully.");
+  });
+
+  reader.readAsText(file);
 }
 
 // Function to show the edit form with the details of the selected item
@@ -335,8 +389,7 @@ watchGrid.addEventListener("click", event => {
   // Remove the item from the watchItems array and update localStorage
   watchItems = watchItems.filter(item => item.id !== itemId);
   saveWatchItems(watchItems);
-  renderFilterButtons();
-  renderWatchItems(currentFilter);
+  refreshDashboard();
 });
 
 // Event listener for edit form submission
@@ -364,8 +417,7 @@ editWatchForm.addEventListener("submit", event => {
   // Save the updated watch items, hide the edit form and re-render the items with the current filter
   saveWatchItems(watchItems);
   hideEditForm();
-  renderFilterButtons();
-  renderWatchItems(currentFilter);
+  refreshDashboard();
 });
 
 // Event listener for cancel button in the edit form
@@ -394,6 +446,22 @@ dashboardSort.addEventListener("change", () => {
   currentSort = dashboardSort.value;
   renderWatchItems(currentFilter);
 });
+// Event listeners for export and import buttons to trigger the respective functions
+exportWatchlistBtn.addEventListener("click", exportWatchlist);
+
+importWatchlistBtn.addEventListener("click", () => {
+  importWatchlistInput.click();
+});
+
+importWatchlistInput.addEventListener("change", () => {
+  const file = importWatchlistInput.files[0];
+
+  if (file) {
+    importWatchlist(file);
+  }
+
+  importWatchlistInput.value = "";
+});
 
 // Event listeners for filter buttons
 filterRow.addEventListener("click", event => {
@@ -408,6 +476,5 @@ filterRow.addEventListener("click", event => {
   renderFilterButtons();
 });
 // Initial render of filter buttons and watch items when the page loads
-renderFilterButtons();
 updateClearSearchButton();
-renderWatchItems();
+refreshDashboard();
