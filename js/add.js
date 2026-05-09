@@ -1,4 +1,3 @@
-// JavaScript for the add watch item page of the Jeniecast app
 const addWatchForm = document.querySelector("#addWatchForm");
 const typeSelect = document.querySelector("#type");
 const statusSelect = document.querySelector("#status");
@@ -18,7 +17,7 @@ addWatchForm.addEventListener("submit", event => {
   const notes = document.querySelector("#notes").value.trim();
 
   const watchItems = getWatchItems();
-  // Check for duplicate title and platform combination
+
   if (isDuplicateWatchItem(watchItems, title, platform)) {
     addFormMessage.textContent = "This title and platform are already saved.";
     addFormMessage.hidden = false;

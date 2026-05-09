@@ -1,3 +1,4 @@
+// Starter data
 const starterWatchItems = [
   {
     id: "starter-the-office",
@@ -31,7 +32,7 @@ const starterWatchItems = [
   }
 ];
 
-// Predefined options for watch item types and statuses
+// Shared form options
 const watchTypes = [
   { value: "Movie", label: "Movie" },
   { value: "Series", label: "Series" },
@@ -50,21 +51,19 @@ const watchStatuses = [
 ];
 
 const watchItemsKey = "jeniecastItems";
-// Key to track if starter cards have been loaded into localStorage to prevent duplicates 
 const starterItemsLoadedKey = "jeniecastStarterItemsLoaded";
 
-// Function to populate select elements with options
+// Form helpers
 function populateSelectOptions(selectElement, options, placeholderText = "") {
   selectElement.replaceChildren();
 
-  // If a placeholder text is provided, add it as the first option
   if (placeholderText) {
     const placeholder = document.createElement("option");
     placeholder.value = "";
     placeholder.textContent = placeholderText;
     selectElement.appendChild(placeholder);
   }
-  // Add the provided options to the select element
+
   options.forEach(option => {
     const optionElement = document.createElement("option");
     optionElement.value = option.value;
@@ -73,6 +72,7 @@ function populateSelectOptions(selectElement, options, placeholderText = "") {
   });
 }
 
+// Item helpers
 function createWatchItemId() {
   return `watch-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -99,6 +99,7 @@ function normalizeWatchItems(items) {
   });
 }
 
+// Validation helpers
 function normalizeDuplicateValue(value) {
   return String(value || "").trim().toLowerCase();
 }
@@ -117,8 +118,8 @@ function isDuplicateWatchItem(items, title, platform, ignoredItemId = "") {
   });
 }
 
+// Storage helpers
 function getWatchItems() {
-  // Check if there are saved items in localStorage and if the starter items have aleady been loaded to prevent duplicates. 
   const savedItems = localStorage.getItem(watchItemsKey);
   const starterItemsLoaded = localStorage.getItem(starterItemsLoadedKey);
 
@@ -143,7 +144,6 @@ function getWatchItems() {
     return itemsWithIds;
   }
 
-  // If no save items and starter items have been loaded, return an empty array. Starter items only load once. 
   if (starterItemsLoaded) {
     return [];
   }
