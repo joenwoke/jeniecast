@@ -1,4 +1,6 @@
-// JavaScript for the main page of the Jeniecast app, including the genie pick feature
+import { testSupabaseConnection } from "./supabaseClient.js";
+testSupabaseConnection();
+
 const geniePickTitle = document.querySelector("#geniePickTitle");
 const geniePickNotes = document.querySelector("#geniePickNotes");
 const geniePickTags = document.querySelector("#geniePickTags");
