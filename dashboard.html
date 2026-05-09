@@ -29,7 +29,10 @@
     <div class="dashboard-controls">
       <div class="search-row">
         <label for="dashboardSearch">Search watchlist</label>
-        <input id="dashboardSearch" type="search" placeholder="Search title, platform, mood, status, or notes..." />
+        <div class="search-control">
+          <input id="dashboardSearch" type="search" placeholder="Search title, platform, mood, status, or notes..." />
+          <button id="clearSearchBtn" class="clear-search-btn" type="button" hidden>Clear</button>
+        </div>
       </div>
 
       <div class="sort-row">
