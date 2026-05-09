@@ -47,6 +47,117 @@ Users should only be able to view, create, edit, and delete their own watch item
 | `created_at` | timestamptz | When the item was created |
 | `updated_at` | timestamptz | When the item was last updated |
 
+## SQL Schema Draft
+
+This is the first planned database table for JeNieCast.
+
+```sql
+create table public.watch_items (
+  id uuid primary key default gen_random_uuid(),
+
+  user_id uuid not null references auth.users(id) on delete cascade,
+
+  title text not null,
+  type text not null,
+  platform text not null,
+  mood_tags text[] not null default '{}',
+  status text not null,
+  notes text default '',
+
+  source text default '',
+  link text default '',
+  rating integer,
+  is_rewatchable boolean not null default false,
+
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+
+  constraint rating_range check (
+    rating is null or rating between 1 and 10
+  )
+);
+```
+
+## `updated_at` Trigger Draft
+
+The `updated_at` value should change automatically whenever a watch item is updated.
+
+```sql
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+create trigger set_watch_items_updated_at
+before update on public.watch_items
+for each row
+execute function public.set_updated_at();
+```
+
+## Row Level Security Draft
+
+Row Level Security should be enabled before app code writes to the table.
+
+```sql
+alter table public.watch_items enable row level security;
+```
+
+Users should only be able to select their own watch items.
+
+```sql
+create policy "Users can select their own watch items"
+on public.watch_items
+for select
+to authenticated
+using (
+  auth.uid() = user_id
+);
+```
+
+Users should only be able to insert rows for their own authenticated user id.
+
+```sql
+create policy "Users can insert their own watch items"
+on public.watch_items
+for insert
+to authenticated
+with check (
+  auth.uid() = user_id
+);
+```
+
+Users should only be able to update their own watch items, and the updated row must remain owned by them.
+
+```sql
+create policy "Users can update their own watch items"
+on public.watch_items
+for update
+to authenticated
+using (
+  auth.uid() = user_id
+)
+with check (
+  auth.uid() = user_id
+);
+```
+
+Users should only be able to delete their own watch items.
+
+```sql
+create policy "Users can delete their own watch items"
+on public.watch_items
+for delete
+to authenticated
+using (
+  auth.uid() = user_id
+);
+```
+
 ## Migration Behavior
 
 JeNieCast currently stores data in `localStorage`.
@@ -81,6 +192,60 @@ Users can only:
 - Insert watch items using their own `user_id`.
 - Update their own watch items.
 - Delete their own watch items.
+
+The frontend should still check for a signed-in user before database actions, but ownership must be enforced by Supabase Row Level Security rather than frontend code alone.
+
+## Vercel Environment Variables
+
+The first Supabase version should keep the project as HTML, CSS, and JavaScript. Vercel will need public browser-safe Supabase values exposed to the frontend.
+
+Planned environment variables:
+
+```text
+SUPABASE_URL
+SUPABASE_ANON_KEY
+```
+
+If the app uses Vite or another build tool later, these may need a public prefix such as:
+
+```text
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+```
+
+For the current plain HTML, CSS, and JavaScript setup, the implementation should avoid committing real keys directly into the repo. The exact loading approach needs to be chosen before code is added.
+
+## First Implementation Slice
+
+The first Supabase implementation should be intentionally small.
+
+Scope:
+
+1. Create the Supabase project.
+2. Enable Google authentication.
+3. Run the `watch_items` table SQL.
+4. Run the `updated_at` trigger SQL.
+5. Enable RLS and add select/insert/update/delete policies.
+6. Add a Supabase client setup file to the existing HTML/CSS/JavaScript app.
+7. Add basic Google login/logout UI.
+8. Display the signed-in user's email or name.
+9. Confirm auth sessions persist across refreshes.
+
+Out of scope for the first slice:
+
+- Replacing all `localStorage` reads and writes.
+- Importing local data into Supabase.
+- Reworking dashboard rendering.
+- Adding new frontend frameworks.
+- Adding server-only Supabase service-role logic.
+
+Success criteria:
+
+- A user can sign in with Google.
+- A user can sign out.
+- The app can detect whether the user is signed in.
+- RLS policies are active before real watchlist writes are introduced.
+- Logged-out `localStorage` behavior still works.
 
 ## Implementation Steps
 
