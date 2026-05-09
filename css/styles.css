@@ -301,25 +301,39 @@ a {
   border-color: #ffb86c;
 }
 
+.dashboard-controls {
+  align-items: flex-end;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(240px, 680px) minmax(180px, 220px);
+  margin-bottom: 28px;
+}
+
 .search-row {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 28px;
-  max-width: 680px;
 }
 
-.search-row label {
+.search-row label,
+.sort-row label {
   font-weight: 700;
 }
 
-.search-row input {
+.search-row input,
+.sort-row select {
   background: #111018;
   border: 1px solid #403a4f;
   border-radius: 14px;
   color: #f8f4ec;
   font-size: 1rem;
   padding: 13px 14px;
+}
+
+.sort-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .form {
@@ -368,6 +382,10 @@ a {
   .hero {
     grid-template-columns: 1fr;
     padding-top: 30px;
+  }
+
+  .dashboard-controls {
+    grid-template-columns: 1fr;
   }
 
   .nav {
