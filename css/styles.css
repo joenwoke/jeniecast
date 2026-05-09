@@ -172,29 +172,29 @@ a {
 
 .stats-row {
   display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  margin-bottom: 28px;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  margin-bottom: 24px;
 }
 
 .stat-card {
   background: #1a1724;
   border: 1px solid #342f43;
-  border-radius: 18px;
-  padding: 18px;
+  border-radius: 14px;
+  padding: 14px;
 }
 
 .stat-card strong {
   color: #ffb86c;
   display: block;
-  font-size: 1.8rem;
+  font-size: 1.45rem;
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .stat-card span {
   color: #cfc7bd;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
