@@ -7,6 +7,7 @@ const dashboardSort = document.querySelector("#dashboardSort");
 const exportWatchlistBtn = document.querySelector("#exportWatchlistBtn");
 const importWatchlistBtn = document.querySelector("#importWatchlistBtn");
 const importWatchlistInput = document.querySelector("#importWatchlistInput");
+const backupMessage = document.querySelector("#backupMessage");
 const editWatchForm = document.querySelector("#editWatchForm");
 const editTitle = document.querySelector("#editTitle");
 const editType = document.querySelector("#editType");
@@ -90,6 +91,15 @@ function getExportFileName() {
   const today = new Date().toISOString().slice(0, 10);
   return `jeniecast-watchlist-${today}.json`;
 }
+
+// Function to show backup import/export feedback without blocking the page
+function showBackupMessage(message, type) {
+  backupMessage.textContent = message;
+  backupMessage.classList.remove("success", "error");
+  backupMessage.classList.add(type);
+  backupMessage.hidden = false;
+}
+
 // Function to export the watchlist as a JSON file for the user to download
 function exportWatchlist() {
   const watchlistJson = JSON.stringify(watchItems, null, 2);
@@ -101,6 +111,7 @@ function exportWatchlist() {
   downloadLink.download = getExportFileName();
   downloadLink.click();
   URL.revokeObjectURL(downloadUrl);
+  showBackupMessage("Watchlist export started.", "success");
 }
 // Function to import a watchlist from a JSON file selected by the user
 function importWatchlist(file) {
@@ -112,12 +123,12 @@ function importWatchlist(file) {
     try {
       importedItems = JSON.parse(reader.result);
     } catch (error) {
-      window.alert("That file is not valid JSON.");
+      showBackupMessage("That file is not valid JSON.", "error");
       return;
     }
 
     if (!Array.isArray(importedItems)) {
-      window.alert("Import failed. The JSON file must contain a watchlist array.");
+      showBackupMessage("Import failed. The JSON file must contain a watchlist array.", "error");
       return;
     }
     // Normalize the imported items to ensure they have all required fields and valid data, then save and refresh the dashboard
@@ -125,7 +136,7 @@ function importWatchlist(file) {
     saveWatchItems(watchItems);
     hideEditForm();
     refreshDashboard();
-    window.alert("Watchlist imported successfully.");
+    showBackupMessage("Watchlist imported successfully.", "success");
   });
 
   reader.readAsText(file);

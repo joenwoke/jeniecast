@@ -389,6 +389,20 @@ a {
   background: #403a4f;
 }
 
+.backup-message {
+  color: #cfc7bd;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.backup-message.success {
+  color: #9be7b1;
+}
+
+.backup-message.error {
+  color: #ff9aa8;
+}
+
 .form {
   max-width: 680px;
   background: #1a1724;
