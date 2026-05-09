@@ -169,6 +169,10 @@ a {
   line-height: 1.6;
 }
 
+.hero-card .btn {
+  margin-top: 24px;
+}
+
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -211,7 +215,14 @@ a {
 }
 
 .dashboard-pick {
+  border-radius: 20px;
   margin-bottom: 28px;
+  max-width: 420px;
+  padding: 22px;
+}
+
+.dashboard-pick h2 {
+  font-size: 1.55rem;
 }
 
 .stat-card {
@@ -464,6 +475,10 @@ a {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.backup-section {
+  margin-top: 28px;
 }
 
 .backup-actions {

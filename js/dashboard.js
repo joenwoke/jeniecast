@@ -1,4 +1,4 @@
-import { getCurrentUser, supabase } from "./supabaseClient.js";
+import { getCurrentUser, signOut, supabase } from "./supabaseClient.js";
 import {
   isDuplicateWatchItem,
   normalizeWatchItems,
@@ -30,6 +30,7 @@ const cancelEditBtn = document.querySelector("#cancelEditBtn");
 const geniePickTitle = document.querySelector("#geniePickTitle");
 const geniePickNotes = document.querySelector("#geniePickNotes");
 const geniePickTags = document.querySelector("#geniePickTags");
+const authArea = document.querySelector("#authArea");
 
 let watchItems = [];
 let currentUser = null;
@@ -46,6 +47,36 @@ function redirectToHome() {
   window.location.href = "index.html";
 }
 
+function getUserDisplayName(user) {
+  return user.user_metadata?.full_name
+    || user.user_metadata?.name
+    || user.email
+    || "Signed in";
+}
+
+function renderSignedInAuthArea(user) {
+  const userText = document.createElement("span");
+  const signOutButton = document.createElement("button");
+
+  authArea.replaceChildren();
+
+  userText.classList.add("auth-user");
+  userText.textContent = getUserDisplayName(user);
+
+  signOutButton.classList.add("auth-btn");
+  signOutButton.type = "button";
+  signOutButton.textContent = "Sign out";
+  signOutButton.addEventListener("click", handleSignOut);
+
+  authArea.appendChild(userText);
+  authArea.appendChild(signOutButton);
+}
+
+async function handleSignOut() {
+  await signOut();
+  redirectToHome();
+}
+
 async function requireSignedInUser() {
   const user = await getCurrentUser();
 
@@ -56,6 +87,7 @@ async function requireSignedInUser() {
   }
 
   currentUser = user;
+  renderSignedInAuthArea(user);
   return user;
 }
 
