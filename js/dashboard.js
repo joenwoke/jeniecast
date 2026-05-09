@@ -2,6 +2,7 @@
 const watchGrid = document.querySelector("#watchGrid");
 const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
+const clearSearchBtn = document.querySelector("#clearSearchBtn");
 const dashboardSort = document.querySelector("#dashboardSort");
 const editWatchForm = document.querySelector("#editWatchForm");
 const editTitle = document.querySelector("#editTitle");
@@ -70,6 +71,10 @@ function renderFilterButtons() {
 
     filterRow.appendChild(button);
   });
+}
+// Function to update visibility of the clear search button based on whether there is a current search term
+function updateClearSearchButton() {
+  clearSearchBtn.hidden = currentSearchTerm === "";
 }
 
 // Function to show the edit form with the details of the selected item
@@ -369,6 +374,18 @@ cancelEditBtn.addEventListener("click", hideEditForm);
 // Event listener for search input to filter items as the user types
 dashboardSearch.addEventListener("input", () => {
   currentSearchTerm = dashboardSearch.value.trim();
+
+  //Update visibility of the clear button based on whether there is a current search term
+  updateClearSearchButton();
+  renderWatchItems(currentFilter);
+});
+
+// Event listener for clear search button to reset the search input and re-render items
+clearSearchBtn.addEventListener("click", () => {
+  dashboardSearch.value = "";
+  currentSearchTerm = "";
+  updateClearSearchButton();
+  dashboardSearch.focus();
   renderWatchItems(currentFilter);
 });
 
@@ -392,4 +409,5 @@ filterRow.addEventListener("click", event => {
 });
 // Initial render of filter buttons and watch items when the page loads
 renderFilterButtons();
+updateClearSearchButton();
 renderWatchItems();
