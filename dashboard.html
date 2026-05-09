@@ -24,18 +24,24 @@
       <p>Filter your saved movies, shows, videos, and comfort rewatches by mood.</p>
     </section>
 
-    <section class="filter-row">
-      <button class="filter-btn active" data-filter="All">All</button>
-      <button class="filter-btn" data-filter="Eating">Eating</button>
-      <button class="filter-btn" data-filter="Funny">Funny</button>
-      <button class="filter-btn" data-filter="Comfort">Comfort</button>
-      <button class="filter-btn" data-filter="Action">Action</button>
-      <button class="filter-btn" data-filter="Need to Identify">Need to Identify</button>
-    </section>
+    <section id="filterRow" class="filter-row"></section>
 
-    <div class="search-row">
-      <label for="dashboardSearch">Search watchlist</label>
-      <input id="dashboardSearch" type="search" placeholder="Search title, platform, mood, status, or notes..." />
+    <div class="dashboard-controls">
+      <div class="search-row">
+        <label for="dashboardSearch">Search watchlist</label>
+        <input id="dashboardSearch" type="search" placeholder="Search title, platform, mood, status, or notes..." />
+      </div>
+
+      <div class="sort-row">
+        <label for="dashboardSort">Sort by</label>
+        <select id="dashboardSort">
+          <option value="recent">Recently added</option>
+          <option value="title">Title A-Z</option>
+          <option value="type">Type</option>
+          <option value="status">Status</option>
+          <option value="platform">Platform</option>
+        </select>
+      </div>
     </div>
 
     <form id="editWatchForm" class="form edit-form" hidden>
