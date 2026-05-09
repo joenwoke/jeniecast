@@ -367,13 +367,22 @@ a {
 }
 
 .search-control input,
-.sort-row select {
+.sort-control select {
   background: #111018;
   border: 1px solid #403a4f;
   border-radius: 14px;
   color: #f8f4ec;
   font-size: 1rem;
   padding: 13px 14px;
+}
+
+.sort-control {
+  display: flex;
+  gap: 10px;
+}
+
+.sort-control select {
+  flex: 1;
 }
 
 .clear-search-btn {
@@ -387,6 +396,21 @@ a {
 }
 
 .clear-search-btn:hover {
+  background: #403a4f;
+}
+
+.reset-view-btn {
+  background: transparent;
+  border: 1px solid #403a4f;
+  border-radius: 14px;
+  color: #f8f4ec;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0 14px;
+  white-space: nowrap;
+}
+
+.reset-view-btn:hover {
   background: #403a4f;
 }
 

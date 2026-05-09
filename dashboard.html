@@ -39,13 +39,16 @@
 
       <div class="sort-row">
         <label for="dashboardSort">Sort by</label>
-        <select id="dashboardSort">
-          <option value="recent">Recently added</option>
-          <option value="title">Title A-Z</option>
-          <option value="type">Type</option>
-          <option value="status">Status</option>
-          <option value="platform">Platform</option>
-        </select>
+        <div class="sort-control">
+          <select id="dashboardSort">
+            <option value="recent">Recently added</option>
+            <option value="title">Title A-Z</option>
+            <option value="type">Type</option>
+            <option value="status">Status</option>
+            <option value="platform">Platform</option>
+          </select>
+          <button id="resetViewBtn" class="reset-view-btn" type="button">Reset view</button>
+        </div>
       </div>
 
       <div class="backup-row">

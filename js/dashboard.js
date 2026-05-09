@@ -4,6 +4,7 @@ const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
 const dashboardSort = document.querySelector("#dashboardSort");
+const resetViewBtn = document.querySelector("#resetViewBtn");
 const exportWatchlistBtn = document.querySelector("#exportWatchlistBtn");
 const importWatchlistBtn = document.querySelector("#importWatchlistBtn");
 const importWatchlistInput = document.querySelector("#importWatchlistInput");
@@ -469,6 +470,16 @@ clearSearchBtn.addEventListener("click", () => {
 dashboardSort.addEventListener("change", () => {
   currentSort = dashboardSort.value;
   renderWatchItems(currentFilter);
+});
+
+resetViewBtn.addEventListener("click", () => {
+  currentFilter = "All";
+  currentSearchTerm = "";
+  currentSort = "recent";
+  dashboardSearch.value = "";
+  dashboardSort.value = currentSort;
+  updateClearSearchButton();
+  refreshDashboard();
 });
 
 exportWatchlistBtn.addEventListener("click", exportWatchlist);
