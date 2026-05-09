@@ -6,8 +6,9 @@ JeNieCast is a HTML, CSS, and JavaScript web app for saving movies, shows, video
 
 - Save watch items with a title, type, platform, mood tags, status, and notes.
 - View saved items on a dashboard.
-- Filter the dashboard by mood.
+- Filter the dashboard by saved mood tags.
 - Search the dashboard by title, platform, type, status, notes, or mood.
+- Clear dashboard search without resetting the active mood filter or sort option.
 - Sort dashboard results by recently added, title, type, status, or platform.
 - Build mood filter buttons from the tags saved on watch items.
 - Edit saved items.
