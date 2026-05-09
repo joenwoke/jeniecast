@@ -1,11 +1,7 @@
 import { getCurrentUser, supabase } from "./supabaseClient.js";
 import {
-  createCreatedAt,
-  createWatchItemId,
-  getWatchItems,
   isDuplicateWatchItem,
   populateSelectOptions,
-  saveWatchItems,
   watchStatuses,
   watchTypes
 } from "./data.js";
@@ -17,6 +13,25 @@ const addFormMessage = document.querySelector("#addFormMessage");
 
 populateSelectOptions(typeSelect, watchTypes, "Choose type");
 populateSelectOptions(statusSelect, watchStatuses, "Choose status");
+
+let currentUser = null;
+
+function redirectToHome() {
+  window.location.href = "index.html";
+}
+
+async function requireSignedInUser() {
+  const user = await getCurrentUser();
+
+  if (!user || !supabase) {
+    console.info("Add Watch requires sign-in. Redirecting to the landing page.");
+    redirectToHome();
+    return null;
+  }
+
+  currentUser = user;
+  return user;
+}
 
 async function getSupabaseDuplicateItems() {
   const { data, error } = await supabase
@@ -77,23 +92,14 @@ async function saveSupabaseWatchItem(newWatchItem, user) {
   window.location.href = "dashboard.html";
 }
 
-function saveLocalWatchItem(newWatchItem) {
-  const watchItems = getWatchItems();
-
-  if (isDuplicateWatchItem(watchItems, newWatchItem.title, newWatchItem.platform)) {
-    addFormMessage.textContent = "This title and platform are already saved.";
-    addFormMessage.hidden = false;
-    return;
-  }
-
-  watchItems.push(newWatchItem);
-  saveWatchItems(watchItems);
-  addWatchForm.reset();
-  window.location.href = "dashboard.html";
-}
-
 addWatchForm.addEventListener("submit", async event => {
   event.preventDefault();
+
+  const user = currentUser || await requireSignedInUser();
+
+  if (!user) {
+    return;
+  }
 
   const title = document.querySelector("#title").value.trim();
   const type = typeSelect.value;
@@ -108,8 +114,6 @@ addWatchForm.addEventListener("submit", async event => {
     .filter(mood => mood !== "");
 
   const newWatchItem = {
-    id: createWatchItemId(),
-    createdAt: createCreatedAt(),
     title,
     type,
     platform,
@@ -120,13 +124,7 @@ addWatchForm.addEventListener("submit", async event => {
 
   addFormMessage.hidden = true;
 
-  const user = await getCurrentUser();
-
-  if (user && supabase) {
-    await saveSupabaseWatchItem(newWatchItem, user);
-    return;
-  }
-
-  console.info("Using localStorage add flow because no Supabase user is signed in.");
-  saveLocalWatchItem(newWatchItem);
+  await saveSupabaseWatchItem(newWatchItem, user);
 });
+
+requireSignedInUser();

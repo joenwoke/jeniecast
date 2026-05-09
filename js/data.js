@@ -1,37 +1,3 @@
-// Starter data
-const starterWatchItems = [
-  {
-    id: "starter-the-office",
-    createdAt: 1,
-    title: "The Office",
-    type: "Series",
-    platform: "Netflix",
-    moods: ["Funny", "Comfort", "Eating"],
-    status: "Rewatchable",
-    notes: "Perfect background show while eating."
-  },
-  {
-    id: "starter-john-wick",
-    createdAt: 2,
-    title: "John Wick",
-    type: "Movie",
-    platform: "Prime Video",
-    moods: ["Action", "Late Night"],
-    status: "Want to Watch",
-    notes: "Good pick when I want action."
-  },
-  {
-    id: "starter-unknown-tiktok-movie",
-    createdAt: 3,
-    title: "Unknown TikTok Movie",
-    type: "Unknown",
-    platform: "TikTok",
-    moods: ["Need to Identify"],
-    status: "Saved Idea",
-    notes: "Saw a clip online but forgot the name."
-  }
-];
-
 // Shared form options
 export const watchTypes = [
   { value: "Movie", label: "Movie" },
@@ -49,9 +15,6 @@ export const watchStatuses = [
   { value: "Rewatchable", label: "Rewatchable" },
   { value: "Saved Idea", label: "Saved Idea" }
 ];
-
-const watchItemsKey = "jeniecastItems";
-const starterItemsLoadedKey = "jeniecastStarterItemsLoaded";
 
 // Form helpers
 export function populateSelectOptions(selectElement, options, placeholderText = "") {
@@ -116,44 +79,4 @@ export function isDuplicateWatchItem(items, title, platform, ignoredItemId = "")
     return normalizeDuplicateValue(item.title) === normalizedTitle
       && normalizeDuplicateValue(item.platform) === normalizedPlatform;
   });
-}
-
-// Storage helpers
-export function getWatchItems() {
-  const savedItems = localStorage.getItem(watchItemsKey);
-  const starterItemsLoaded = localStorage.getItem(starterItemsLoadedKey);
-
-  if (savedItems) {
-    let parsedItems;
-
-    try {
-      parsedItems = JSON.parse(savedItems);
-    } catch (error) {
-      saveWatchItems([]);
-      return [];
-    }
-
-    if (!Array.isArray(parsedItems)) {
-      saveWatchItems([]);
-      return [];
-    }
-
-    const itemsWithIds = normalizeWatchItems(parsedItems);
-
-    saveWatchItems(itemsWithIds);
-    return itemsWithIds;
-  }
-
-  if (starterItemsLoaded) {
-    return [];
-  }
-
-  localStorage.setItem(watchItemsKey, JSON.stringify(starterWatchItems));
-  localStorage.setItem(starterItemsLoadedKey, "true");
-  return starterWatchItems;
-}
-
-export function saveWatchItems(items) {
-  localStorage.setItem(watchItemsKey, JSON.stringify(items));
-  localStorage.setItem(starterItemsLoadedKey, "true");
 }

@@ -210,6 +210,10 @@ a {
   margin-bottom: 20px;
 }
 
+.dashboard-pick {
+  margin-bottom: 28px;
+}
+
 .stat-card {
   align-items: baseline;
   background: #1a1724;

@@ -1,10 +1,8 @@
 import { getCurrentUser, supabase } from "./supabaseClient.js";
 import {
-  getWatchItems,
   isDuplicateWatchItem,
   normalizeWatchItems,
   populateSelectOptions,
-  saveWatchItems,
   watchStatuses,
   watchTypes
 } from "./data.js";
@@ -29,8 +27,12 @@ const editStatus = document.querySelector("#editStatus");
 const editNotes = document.querySelector("#editNotes");
 const editFormMessage = document.querySelector("#editFormMessage");
 const cancelEditBtn = document.querySelector("#cancelEditBtn");
+const geniePickTitle = document.querySelector("#geniePickTitle");
+const geniePickNotes = document.querySelector("#geniePickNotes");
+const geniePickTags = document.querySelector("#geniePickTags");
 
 let watchItems = [];
+let currentUser = null;
 let currentFilter = "All";
 let currentSearchTerm = "";
 let currentSort = "recent";
@@ -40,6 +42,23 @@ populateSelectOptions(editType, watchTypes);
 populateSelectOptions(editStatus, watchStatuses);
 
 // State helpers
+function redirectToHome() {
+  window.location.href = "index.html";
+}
+
+async function requireSignedInUser() {
+  const user = await getCurrentUser();
+
+  if (!user || !supabase) {
+    console.info("Dashboard requires sign-in. Redirecting to the landing page.");
+    redirectToHome();
+    return null;
+  }
+
+  currentUser = user;
+  return user;
+}
+
 function mapSupabaseWatchItem(item) {
   return {
     id: item.id,
@@ -54,11 +73,9 @@ function mapSupabaseWatchItem(item) {
 }
 
 async function loadWatchItems() {
-  const user = await getCurrentUser();
+  const user = currentUser || await requireSignedInUser();
 
-  if (!user || !supabase) {
-    watchItems = getWatchItems();
-    console.info("Using localStorage watchlist because no Supabase user is signed in.");
+  if (!user) {
     return;
   }
 
@@ -68,8 +85,8 @@ async function loadWatchItems() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Supabase watch_items read failed. Falling back to localStorage:", error.message);
-    watchItems = getWatchItems();
+    console.error("Supabase watch_items read failed:", error.message);
+    watchItems = [];
     return;
   }
 
@@ -158,12 +175,35 @@ function renderDashboardStats(visibleCount) {
   });
 }
 
+function renderGeniePick() {
+  geniePickTags.replaceChildren();
+
+  if (watchItems.length === 0) {
+    geniePickTitle.textContent = "No saved picks yet";
+    geniePickNotes.textContent = "Add something to your watchlist to get a Genie pick.";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * watchItems.length);
+  const pick = watchItems[randomIndex];
+
+  geniePickTitle.textContent = pick.title;
+  geniePickNotes.textContent = pick.notes || `${pick.type} on ${pick.platform}`;
+
+  pick.moods.forEach(mood => {
+    const tag = document.createElement("span");
+    tag.textContent = mood;
+    geniePickTags.appendChild(tag);
+  });
+}
+
 function updateClearSearchButton() {
   clearSearchBtn.hidden = currentSearchTerm === "";
 }
 
 function refreshDashboard() {
   renderFilterButtons();
+  renderGeniePick();
   renderWatchItems(currentFilter);
 }
 
@@ -196,7 +236,7 @@ function exportWatchlist() {
 function importWatchlist(file) {
   const reader = new FileReader();
 
-  reader.addEventListener("load", () => {
+  reader.addEventListener("load", async () => {
     let importedItems;
 
     try {
@@ -211,14 +251,100 @@ function importWatchlist(file) {
       return;
     }
 
-    watchItems = normalizeWatchItems(importedItems);
-    saveWatchItems(watchItems);
+    await replaceSupabaseWatchlist(normalizeWatchItems(importedItems));
     hideEditForm();
-    refreshDashboard();
-    showBackupMessage("Watchlist imported successfully.", "success");
   });
 
   reader.readAsText(file);
+}
+
+async function updateSupabaseWatchItem(updatedItem) {
+  const { error } = await supabase
+    .from("watch_items")
+    .update({
+      title: updatedItem.title,
+      type: updatedItem.type,
+      platform: updatedItem.platform,
+      mood_tags: updatedItem.moods,
+      status: updatedItem.status,
+      notes: updatedItem.notes
+    })
+    .eq("id", updatedItem.id);
+
+  if (error) {
+    console.error("Supabase watch_items update failed:", error.message);
+    editFormMessage.textContent = "Could not save changes. Please try again.";
+    editFormMessage.hidden = false;
+    return false;
+  }
+
+  console.info("Updated watch item in Supabase.");
+  return true;
+}
+
+async function deleteSupabaseWatchItem(itemId) {
+  const { error } = await supabase
+    .from("watch_items")
+    .delete()
+    .eq("id", itemId);
+
+  if (error) {
+    console.error("Supabase watch_items delete failed:", error.message);
+    return false;
+  }
+
+  console.info("Deleted watch item from Supabase.");
+  return true;
+}
+
+async function replaceSupabaseWatchlist(importedItems) {
+  if (!currentUser) {
+    showBackupMessage("Please sign in before importing.", "error");
+    return;
+  }
+
+  const currentIds = watchItems.map(item => item.id);
+
+  if (currentIds.length > 0) {
+    const { error: deleteError } = await supabase
+      .from("watch_items")
+      .delete()
+      .in("id", currentIds);
+
+    if (deleteError) {
+      console.error("Supabase watch_items import delete failed:", deleteError.message);
+      showBackupMessage("Import failed. Could not replace your current watchlist.", "error");
+      return;
+    }
+  }
+
+  if (importedItems.length > 0) {
+    const rows = importedItems.map(item => {
+      return {
+        user_id: currentUser.id,
+        title: item.title,
+        type: item.type,
+        platform: item.platform,
+        mood_tags: item.moods,
+        status: item.status,
+        notes: item.notes
+      };
+    });
+
+    const { error: insertError } = await supabase
+      .from("watch_items")
+      .insert(rows);
+
+    if (insertError) {
+      console.error("Supabase watch_items import insert failed:", insertError.message);
+      showBackupMessage("Import failed. Could not save the imported watchlist.", "error");
+      return;
+    }
+  }
+
+  await loadWatchItems();
+  refreshDashboard();
+  showBackupMessage("Watchlist imported successfully.", "success");
 }
 
 // Edit form helpers
@@ -435,7 +561,7 @@ function renderWatchItems(filter = "All") {
 }
 
 // Event handlers
-watchGrid.addEventListener("click", event => {
+watchGrid.addEventListener("click", async event => {
   const editButton = event.target.closest(".edit-btn");
 
   if (editButton) {
@@ -462,12 +588,17 @@ watchGrid.addEventListener("click", event => {
     return;
   }
 
+  const wasDeleted = await deleteSupabaseWatchItem(itemId);
+
+  if (!wasDeleted) {
+    return;
+  }
+
   watchItems = watchItems.filter(item => item.id !== itemId);
-  saveWatchItems(watchItems);
   refreshDashboard();
 });
 
-editWatchForm.addEventListener("submit", event => {
+editWatchForm.addEventListener("submit", async event => {
   event.preventDefault();
 
   if (isDuplicateWatchItem(watchItems, editTitle.value, editPlatform.value, editingItemId)) {
@@ -478,23 +609,28 @@ editWatchForm.addEventListener("submit", event => {
 
   editFormMessage.hidden = true;
 
-  watchItems = watchItems.map(item => {
-    if (item.id !== editingItemId) {
-      return item;
-    }
+  const updatedItem = {
+    id: editingItemId,
+    title: editTitle.value.trim(),
+    type: editType.value,
+    platform: editPlatform.value.trim(),
+    moods: getMoodsFromInput(editMoods.value),
+    status: editStatus.value,
+    notes: editNotes.value.trim()
+  };
 
-    return {
-      ...item,
-      title: editTitle.value.trim(),
-      type: editType.value,
-      platform: editPlatform.value.trim(),
-      moods: getMoodsFromInput(editMoods.value),
-      status: editStatus.value,
-      notes: editNotes.value.trim()
-    };
+  const wasUpdated = await updateSupabaseWatchItem(updatedItem);
+
+  if (!wasUpdated) {
+    return;
+  }
+
+  watchItems = watchItems.map(item => {
+    return item.id === editingItemId
+      ? { ...item, ...updatedItem }
+      : item;
   });
 
-  saveWatchItems(watchItems);
   hideEditForm();
   refreshDashboard();
 });
@@ -559,6 +695,12 @@ filterRow.addEventListener("click", event => {
 });
 
 async function initializeDashboard() {
+  const user = await requireSignedInUser();
+
+  if (!user) {
+    return;
+  }
+
   await loadWatchItems();
   updateClearSearchButton();
   refreshDashboard();
