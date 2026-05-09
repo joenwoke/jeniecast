@@ -1,3 +1,5 @@
+import { getCurrentUser, supabase } from "./supabaseClient.js";
+
 const watchGrid = document.querySelector("#watchGrid");
 const dashboardStats = document.querySelector("#dashboardStats");
 const filterRow = document.querySelector("#filterRow");
@@ -19,7 +21,7 @@ const editNotes = document.querySelector("#editNotes");
 const editFormMessage = document.querySelector("#editFormMessage");
 const cancelEditBtn = document.querySelector("#cancelEditBtn");
 
-let watchItems = getWatchItems();
+let watchItems = [];
 let currentFilter = "All";
 let currentSearchTerm = "";
 let currentSort = "recent";
@@ -29,6 +31,43 @@ populateSelectOptions(editType, watchTypes);
 populateSelectOptions(editStatus, watchStatuses);
 
 // State helpers
+function mapSupabaseWatchItem(item) {
+  return {
+    id: item.id,
+    createdAt: new Date(item.created_at).getTime(),
+    title: item.title,
+    type: item.type,
+    platform: item.platform,
+    moods: item.mood_tags || [],
+    status: item.status,
+    notes: item.notes || ""
+  };
+}
+
+async function loadWatchItems() {
+  const user = await getCurrentUser();
+
+  if (!user || !supabase) {
+    watchItems = getWatchItems();
+    console.info("Using localStorage watchlist because no Supabase user is signed in.");
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("watch_items")
+    .select("id,title,type,platform,mood_tags,status,notes,created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Supabase watch_items read failed. Falling back to localStorage:", error.message);
+    watchItems = getWatchItems();
+    return;
+  }
+
+  watchItems = data.map(mapSupabaseWatchItem);
+  console.info(`Loaded ${watchItems.length} watch item(s) from Supabase.`);
+}
+
 function getMoodsFromInput(value) {
   return value
     .split(",")
@@ -510,5 +549,10 @@ filterRow.addEventListener("click", event => {
   renderFilterButtons();
 });
 
-updateClearSearchButton();
-refreshDashboard();
+async function initializeDashboard() {
+  await loadWatchItems();
+  updateClearSearchButton();
+  refreshDashboard();
+}
+
+initializeDashboard();
