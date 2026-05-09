@@ -5,6 +5,7 @@ import {
   signOut,
   testSupabaseConnection
 } from "./supabaseClient.js";
+import { getWatchItems } from "./data.js";
 
 testSupabaseConnection();
 

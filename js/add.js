@@ -1,4 +1,14 @@
 import { getCurrentUser, supabase } from "./supabaseClient.js";
+import {
+  createCreatedAt,
+  createWatchItemId,
+  getWatchItems,
+  isDuplicateWatchItem,
+  populateSelectOptions,
+  saveWatchItems,
+  watchStatuses,
+  watchTypes
+} from "./data.js";
 
 const addWatchForm = document.querySelector("#addWatchForm");
 const typeSelect = document.querySelector("#type");

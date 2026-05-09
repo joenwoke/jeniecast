@@ -1,4 +1,13 @@
 import { getCurrentUser, supabase } from "./supabaseClient.js";
+import {
+  getWatchItems,
+  isDuplicateWatchItem,
+  normalizeWatchItems,
+  populateSelectOptions,
+  saveWatchItems,
+  watchStatuses,
+  watchTypes
+} from "./data.js";
 
 const watchGrid = document.querySelector("#watchGrid");
 const dashboardStats = document.querySelector("#dashboardStats");

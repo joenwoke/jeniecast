@@ -33,7 +33,7 @@ const starterWatchItems = [
 ];
 
 // Shared form options
-const watchTypes = [
+export const watchTypes = [
   { value: "Movie", label: "Movie" },
   { value: "Series", label: "Series" },
   { value: "YouTube", label: "YouTube" },
@@ -42,7 +42,7 @@ const watchTypes = [
   { value: "Unknown", label: "Unknown / Forgot Title" }
 ];
 
-const watchStatuses = [
+export const watchStatuses = [
   { value: "Want to Watch", label: "Want to Watch" },
   { value: "Watching", label: "Watching" },
   { value: "Finished", label: "Finished" },
@@ -54,7 +54,7 @@ const watchItemsKey = "jeniecastItems";
 const starterItemsLoadedKey = "jeniecastStarterItemsLoaded";
 
 // Form helpers
-function populateSelectOptions(selectElement, options, placeholderText = "") {
+export function populateSelectOptions(selectElement, options, placeholderText = "") {
   selectElement.replaceChildren();
 
   if (placeholderText) {
@@ -73,15 +73,15 @@ function populateSelectOptions(selectElement, options, placeholderText = "") {
 }
 
 // Item helpers
-function createWatchItemId() {
+export function createWatchItemId() {
   return `watch-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function createCreatedAt() {
+export function createCreatedAt() {
   return Date.now();
 }
 
-function normalizeWatchItems(items) {
+export function normalizeWatchItems(items) {
   return items.map((item, index) => {
     const watchItem = item && typeof item === "object" ? item : {};
 
@@ -104,7 +104,7 @@ function normalizeDuplicateValue(value) {
   return String(value || "").trim().toLowerCase();
 }
 
-function isDuplicateWatchItem(items, title, platform, ignoredItemId = "") {
+export function isDuplicateWatchItem(items, title, platform, ignoredItemId = "") {
   const normalizedTitle = normalizeDuplicateValue(title);
   const normalizedPlatform = normalizeDuplicateValue(platform);
 
@@ -119,7 +119,7 @@ function isDuplicateWatchItem(items, title, platform, ignoredItemId = "") {
 }
 
 // Storage helpers
-function getWatchItems() {
+export function getWatchItems() {
   const savedItems = localStorage.getItem(watchItemsKey);
   const starterItemsLoaded = localStorage.getItem(starterItemsLoadedKey);
 
@@ -153,7 +153,7 @@ function getWatchItems() {
   return starterWatchItems;
 }
 
-function saveWatchItems(items) {
+export function saveWatchItems(items) {
   localStorage.setItem(watchItemsKey, JSON.stringify(items));
   localStorage.setItem(starterItemsLoadedKey, "true");
 }
