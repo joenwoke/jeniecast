@@ -1,6 +1,7 @@
 // dashboard.js - JavaScript for managing the watch list dashboard
 const watchGrid = document.querySelector("#watchGrid");
 const filterButtons = document.querySelectorAll(".filter-btn");
+const dashboardSearch = document.querySelector("#dashboardSearch");
 const editWatchForm = document.querySelector("#editWatchForm");
 const editTitle = document.querySelector("#editTitle");
 const editType = document.querySelector("#editType");
@@ -12,6 +13,7 @@ const cancelEditBtn = document.querySelector("#cancelEditBtn");
 
 let watchItems = getWatchItems();
 let currentFilter = "All";
+let currentSearchTerm = "";
 // Variable to keep track of the currently editing item ID
 let editingItemId = "";
 
@@ -138,15 +140,36 @@ function createWatchCard(item) {
   return card;
 }
 
+// Function to check if a watch item matches the current search term
+function itemMatchesSearch(item, searchTerm) {
+  if (!searchTerm) {
+    return true;
+  }
+
+  // Combine all relevant text fields of the item into a single string for searching
+  const searchableText = [
+    item.title,
+    item.type,
+    item.platform,
+    item.status,
+    item.notes,
+    ...item.moods
+  ].join(" ").toLowerCase();
+
+  return searchableText.includes(searchTerm);
+}
+
 // Function to retrieve watch items from localStorage
 function renderWatchItems(filter = "All") {
   currentFilter = filter;
   watchGrid.replaceChildren();
+  const searchTerm = currentSearchTerm.toLowerCase();
 
   // Filter items based on the selected mood filter
-  const filteredItems = filter === "All"
+  const moodFilteredItems = filter === "All"
     ? watchItems
     : watchItems.filter(item => item.moods.includes(filter));
+  const filteredItems = moodFilteredItems.filter(item => itemMatchesSearch(item, searchTerm));
 
   // If no items match the filter, show a friendly message 
   if (filteredItems.length === 0) {
@@ -230,6 +253,12 @@ editWatchForm.addEventListener("submit", event => {
 
 // Event listener for cancel button in the edit form
 cancelEditBtn.addEventListener("click", hideEditForm);
+
+// Event listener for search input to filter items as the user types
+dashboardSearch.addEventListener("input", () => {
+  currentSearchTerm = dashboardSearch.value.trim();
+  renderWatchItems(currentFilter);
+});
 
 // Event listeners for filter buttons
 filterButtons.forEach(button => {
