@@ -1,13 +1,19 @@
+// JavaScript for the add watch item page of the Jeniecast app
 const addWatchForm = document.querySelector("#addWatchForm");
+const typeSelect = document.querySelector("#type");
+const statusSelect = document.querySelector("#status");
+
+populateSelectOptions(typeSelect, watchTypes, "Choose type");
+populateSelectOptions(statusSelect, watchStatuses, "Choose status");
 
 addWatchForm.addEventListener("submit", event => {
   event.preventDefault();
 
   const title = document.querySelector("#title").value.trim();
-  const type = document.querySelector("#type").value;
+  const type = typeSelect.value;
   const platform = document.querySelector("#platform").value.trim();
   const moodsInput = document.querySelector("#moods").value.trim();
-  const status = document.querySelector("#status").value;
+  const status = statusSelect.value;
   const notes = document.querySelector("#notes").value.trim();
 
   const moods = moodsInput

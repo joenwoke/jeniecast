@@ -14,6 +14,10 @@ let watchItems = getWatchItems();
 let currentFilter = "All";
 // Variable to keep track of the currently editing item ID
 let editingItemId = "";
+
+populateSelectOptions(editType, watchTypes);
+populateSelectOptions(editStatus, watchStatuses);
+
 // Function to retrieve watch items from localStorage
 function getMoodsFromInput(value) {
   return value

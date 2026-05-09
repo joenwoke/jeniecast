@@ -28,9 +28,47 @@ const starterWatchItems = [
   }
 ];
 
+// Predefined options for watch item types and statuses
+const watchTypes = [
+  { value: "Movie", label: "Movie" },
+  { value: "Series", label: "Series" },
+  { value: "YouTube", label: "YouTube" },
+  { value: "Anime", label: "Anime" },
+  { value: "Documentary", label: "Documentary" },
+  { value: "Unknown", label: "Unknown / Forgot Title" }
+];
+
+const watchStatuses = [
+  { value: "Want to Watch", label: "Want to Watch" },
+  { value: "Watching", label: "Watching" },
+  { value: "Finished", label: "Finished" },
+  { value: "Rewatchable", label: "Rewatchable" },
+  { value: "Saved Idea", label: "Saved Idea" }
+];
+
 const watchItemsKey = "jeniecastItems";
 // Key to track if starter cards have been loaded into localStorage to prevent duplicates 
 const starterItemsLoadedKey = "jeniecastStarterItemsLoaded";
+
+// Function to populate select elements with options
+function populateSelectOptions(selectElement, options, placeholderText = "") {
+  selectElement.replaceChildren();
+
+  // If a placeholder text is provided, add it as the first option
+  if (placeholderText) {
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = placeholderText;
+    selectElement.appendChild(placeholder);
+  }
+  // Add the provided options to the select element
+  options.forEach(option => {
+    const optionElement = document.createElement("option");
+    optionElement.value = option.value;
+    optionElement.textContent = option.label;
+    selectElement.appendChild(optionElement);
+  });
+}
 
 function createWatchItemId() {
   return `watch-${Date.now()}-${Math.random().toString(16).slice(2)}`;
