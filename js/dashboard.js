@@ -43,10 +43,101 @@ function hideEditForm() {
   editWatchForm.hidden = true;
 }
 
+function createSvgIcon(paths) {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.classList.add("action-icon");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+
+  paths.forEach(pathData => {
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", pathData);
+    svg.appendChild(path);
+  });
+
+  return svg;
+}
+
+function createIconButton(className, label, itemId, iconPaths) {
+  const button = document.createElement("button");
+  button.classList.add("icon-btn", className);
+  button.type = "button";
+  button.dataset.id = itemId;
+  button.setAttribute("aria-label", label);
+  button.title = label.split(" ")[0];
+  button.appendChild(createSvgIcon(iconPaths));
+
+  return button;
+}
+
+function createEmptyStateCard() {
+  const card = document.createElement("div");
+  const heading = document.createElement("h3");
+  const message = document.createElement("p");
+
+  card.classList.add("watch-card");
+  heading.textContent = "No matches found";
+  message.textContent = "Add more watch items or try a different mood filter.";
+
+  card.appendChild(heading);
+  card.appendChild(message);
+
+  return card;
+}
+
+function createWatchCard(item) {
+  const card = document.createElement("article");
+  const meta = document.createElement("p");
+  const title = document.createElement("h3");
+  const status = document.createElement("p");
+  const notes = document.createElement("p");
+  const tagRow = document.createElement("div");
+  const cardActions = document.createElement("div");
+  const editButton = createIconButton("edit-btn", `Edit ${item.title}`, item.id, [
+    "M4 20h4L19 9l-4-4L4 16v4Z",
+    "M13 7l4 4"
+  ]);
+  const deleteButton = createIconButton("delete-btn", `Delete ${item.title}`, item.id, [
+    "M9 3h6l1 2h4v2H4V5h4l1-2Z",
+    "M6 9h12l-1 12H7L6 9Z",
+    "M10 11v8",
+    "M14 11v8"
+  ]);
+
+  card.classList.add("watch-card");
+  meta.classList.add("card-meta");
+  status.classList.add("status-badge");
+  tagRow.classList.add("tag-row");
+  cardActions.classList.add("card-actions");
+
+  meta.textContent = `${item.type} • ${item.platform}`;
+  title.textContent = item.title;
+  status.textContent = item.status;
+  notes.textContent = item.notes;
+
+  item.moods.forEach(mood => {
+    const tag = document.createElement("span");
+    tag.textContent = mood;
+    tagRow.appendChild(tag);
+  });
+
+  cardActions.appendChild(editButton);
+  cardActions.appendChild(deleteButton);
+
+  card.appendChild(meta);
+  card.appendChild(title);
+  card.appendChild(status);
+  card.appendChild(notes);
+  card.appendChild(tagRow);
+  card.appendChild(cardActions);
+
+  return card;
+}
+
 // Function to retrieve watch items from localStorage
 function renderWatchItems(filter = "All") {
   currentFilter = filter;
-  watchGrid.innerHTML = "";
+  watchGrid.replaceChildren();
 
   // Filter items based on the selected mood filter
   const filteredItems = filter === "All"
@@ -55,51 +146,14 @@ function renderWatchItems(filter = "All") {
 
   // If no items match the filter, show a friendly message 
   if (filteredItems.length === 0) {
-    watchGrid.innerHTML = `
-      <div class="watch-card">
-        <h3>No matches found</h3>
-        <p>Add more watch items or try a different mood filter.</p>
-      </div>
-    `;
+    watchGrid.appendChild(createEmptyStateCard());
     return;
   }
 
   // Create and append cards for each filtered item
   filteredItems.forEach(item => {
-    const card = document.createElement("article");
-    card.classList.add("watch-card");
-
-    card.innerHTML = `
-      <p class="card-meta">${item.type} • ${item.platform}</p>
-      <h3>${item.title}</h3>
-      <p class="status-badge">${item.status}</p>
-      <p>${item.notes}</p>
-
-      <div class="tag-row">
-        ${item.moods.map(mood => `<span>${mood}</span>`).join("")}
-      </div>
-
-      <div class="card-actions">
-        <button class="icon-btn edit-btn" type="button" data-id="${item.id}" aria-label="Edit ${item.title}" title="Edit">
-          <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 20h4L19 9l-4-4L4 16v4Z"></path>
-            <path d="M13 7l4 4"></path>
-          </svg>
-        </button>
-
-        <button class="icon-btn delete-btn" type="button" data-id="${item.id}" aria-label="Delete ${item.title}" title="Delete">
-          <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 3h6l1 2h4v2H4V5h4l1-2Z"></path>
-            <path d="M6 9h12l-1 12H7L6 9Z"></path>
-            <path d="M10 11v8"></path>
-            <path d="M14 11v8"></path>
-          </svg>
-        </button>
-      </div>
-    `;
-
     // Append the card to the watch grid
-    watchGrid.appendChild(card);
+    watchGrid.appendChild(createWatchCard(item));
   });
 }
 

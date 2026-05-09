@@ -11,7 +11,7 @@ function renderGeniePick() {
   if (watchItems.length === 0) {
     geniePickTitle.textContent = "No saved picks yet";
     geniePickNotes.textContent = "Add something to your watchlist to get a genie pick.";
-    geniePickTags.innerHTML = "";
+    geniePickTags.replaceChildren();
     return;
   }
 
@@ -22,7 +22,7 @@ function renderGeniePick() {
   // Display the pick details in the genie pick section
   geniePickTitle.textContent = pick.title;
   geniePickNotes.textContent = pick.notes || `${pick.type} on ${pick.platform}`;
-  geniePickTags.innerHTML = "";
+  geniePickTags.replaceChildren();
 
   // Create tags for each mood associated with the pick
   pick.moods.forEach(mood => {
