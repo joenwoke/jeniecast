@@ -92,9 +92,10 @@ function createStatCard(label, value) {
   return card;
 }
 
-function renderDashboardStats() {
+function renderDashboardStats(visibleCount) {
   const stats = [
     { label: "Total saved", value: watchItems.length },
+    { label: "Visible", value: visibleCount },
     { label: "Want to Watch", value: getStatusCount("Want to Watch") },
     { label: "Watching", value: getStatusCount("Watching") },
     { label: "Finished", value: getStatusCount("Finished") },
@@ -113,7 +114,6 @@ function updateClearSearchButton() {
 }
 
 function refreshDashboard() {
-  renderDashboardStats();
   renderFilterButtons();
   renderWatchItems(currentFilter);
 }
@@ -356,15 +356,23 @@ function getEmptyStateContent(filter, searchTerm) {
   };
 }
 
+function getVisibleWatchItems(filter) {
+  const searchTerm = currentSearchTerm.toLowerCase();
+  const moodFilteredItems = filter === "All"
+    ? watchItems
+    : watchItems.filter(item => item.moods.includes(filter));
+
+  return moodFilteredItems.filter(item => itemMatchesSearch(item, searchTerm));
+}
+
 function renderWatchItems(filter = "All") {
   currentFilter = filter;
   watchGrid.replaceChildren();
   const searchTerm = currentSearchTerm.toLowerCase();
+  const visibleItems = getVisibleWatchItems(filter);
+  const filteredItems = sortWatchItems(visibleItems);
 
-  const moodFilteredItems = filter === "All"
-    ? watchItems
-    : watchItems.filter(item => item.moods.includes(filter));  
-  const filteredItems = sortWatchItems(moodFilteredItems.filter(item => itemMatchesSearch(item, searchTerm)));
+  renderDashboardStats(visibleItems.length);
 
   if (filteredItems.length === 0) {
     const emptyState = getEmptyStateContent(filter, searchTerm);
