@@ -225,6 +225,12 @@ a {
   font-size: 1.55rem;
 }
 
+.dashboard-helper-text {
+  color: #cfc7bd;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
 .stat-card {
   align-items: baseline;
   background: #1a1724;
@@ -479,6 +485,12 @@ a {
 
 .backup-section {
   margin-top: 28px;
+}
+
+.backup-description {
+  color: #cfc7bd;
+  line-height: 1.5;
+  max-width: 680px;
 }
 
 .backup-actions {
