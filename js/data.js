@@ -99,6 +99,24 @@ function normalizeWatchItems(items) {
   });
 }
 
+function normalizeDuplicateValue(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function isDuplicateWatchItem(items, title, platform, ignoredItemId = "") {
+  const normalizedTitle = normalizeDuplicateValue(title);
+  const normalizedPlatform = normalizeDuplicateValue(platform);
+
+  return items.some(item => {
+    if (item.id === ignoredItemId) {
+      return false;
+    }
+
+    return normalizeDuplicateValue(item.title) === normalizedTitle
+      && normalizeDuplicateValue(item.platform) === normalizedPlatform;
+  });
+}
+
 function getWatchItems() {
   // Check if there are saved items in localStorage and if the starter items have aleady been loaded to prevent duplicates. 
   const savedItems = localStorage.getItem(watchItemsKey);

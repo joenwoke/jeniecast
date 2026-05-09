@@ -15,6 +15,7 @@ const editPlatform = document.querySelector("#editPlatform");
 const editMoods = document.querySelector("#editMoods");
 const editStatus = document.querySelector("#editStatus");
 const editNotes = document.querySelector("#editNotes");
+const editFormMessage = document.querySelector("#editFormMessage");
 const cancelEditBtn = document.querySelector("#cancelEditBtn");
 
 let watchItems = getWatchItems();
@@ -151,6 +152,7 @@ function showEditForm(item) {
   editMoods.value = item.moods.join(", ");
   editStatus.value = item.status;
   editNotes.value = item.notes;
+  editFormMessage.hidden = true;
 
   // Show the edit form and focus on the title input
   editWatchForm.hidden = false;
@@ -160,6 +162,7 @@ function showEditForm(item) {
 function hideEditForm() {
   editingItemId = "";
   editWatchForm.reset();
+  editFormMessage.hidden = true;
   editWatchForm.hidden = true;
 }
 
@@ -406,6 +409,15 @@ watchGrid.addEventListener("click", event => {
 // Event listener for edit form submission
 editWatchForm.addEventListener("submit", event => {
   event.preventDefault();
+
+  // Check for duplicate title and platform combination, ignoring the currently editing item
+  if (isDuplicateWatchItem(watchItems, editTitle.value, editPlatform.value, editingItemId)) {
+    editFormMessage.textContent = "Another saved item already uses this title and platform.";
+    editFormMessage.hidden = false;
+    return;
+  }
+
+  editFormMessage.hidden = true;
 
   // Update the watch item in the watchItems array with the new values from the form
   watchItems = watchItems.map(item => {

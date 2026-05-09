@@ -2,6 +2,7 @@
 const addWatchForm = document.querySelector("#addWatchForm");
 const typeSelect = document.querySelector("#type");
 const statusSelect = document.querySelector("#status");
+const addFormMessage = document.querySelector("#addFormMessage");
 
 populateSelectOptions(typeSelect, watchTypes, "Choose type");
 populateSelectOptions(statusSelect, watchStatuses, "Choose status");
@@ -15,6 +16,16 @@ addWatchForm.addEventListener("submit", event => {
   const moodsInput = document.querySelector("#moods").value.trim();
   const status = statusSelect.value;
   const notes = document.querySelector("#notes").value.trim();
+
+  const watchItems = getWatchItems();
+  // Check for duplicate title and platform combination
+  if (isDuplicateWatchItem(watchItems, title, platform)) {
+    addFormMessage.textContent = "This title and platform are already saved.";
+    addFormMessage.hidden = false;
+    return;
+  }
+
+  addFormMessage.hidden = true;
 
   const moods = moodsInput
     .split(",")
@@ -32,7 +43,6 @@ addWatchForm.addEventListener("submit", event => {
     notes
   };
 
-  const watchItems = getWatchItems();
   watchItems.push(newWatchItem);
   saveWatchItems(watchItems);
 

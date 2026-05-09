@@ -438,6 +438,17 @@ a {
   resize: vertical;
 }
 
+.form-message {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 18px;
+}
+
+.form-message.error {
+  color: #ff9aa8;
+}
+
 .full-width {
   width: 100%;
   border: none;
