@@ -214,15 +214,42 @@ a {
   margin-bottom: 20px;
 }
 
+.dashboard-feature {
+  align-items: stretch;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(280px, 420px) minmax(240px, 320px);
+  margin-bottom: 28px;
+}
+
 .dashboard-pick {
   border-radius: 20px;
-  margin-bottom: 28px;
-  max-width: 420px;
   padding: 22px;
 }
 
 .dashboard-pick h2 {
   font-size: 1.55rem;
+}
+
+.add-watch-panel {
+  background: #1a1724;
+  border: 1px solid #342f43;
+  border-radius: 20px;
+  padding: 22px;
+}
+
+.add-watch-panel h2 {
+  font-size: 1.35rem;
+  margin-bottom: 10px;
+}
+
+.add-watch-panel p:not(.card-label) {
+  color: #cfc7bd;
+  line-height: 1.5;
+}
+
+.add-watch-panel .btn {
+  margin-top: 20px;
 }
 
 .dashboard-helper-text {
@@ -271,12 +298,27 @@ a {
   background: #1a1724;
   border: 1px solid #342f43;
   border-radius: 24px;
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
 }
 
 .watch-card h3 {
   font-size: 1.4rem;
-  margin-bottom: 8px;
+}
+
+.watch-card-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+}
+
+.watch-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .watch-card p {
@@ -288,7 +330,10 @@ a {
   color: #ffb86c;
   font-size: 0.85rem;
   font-weight: 700;
-  margin-bottom: 12px;
+}
+
+.card-notes {
+  min-height: 3rem;
 }
 
 .status-badge {
@@ -297,16 +342,16 @@ a {
   border: 1px solid #403a4f;
   border-radius: 999px;
   color: #f8f4ec;
+  flex: 0 0 auto;
   font-size: 0.8rem;
   font-weight: 700;
-  margin-bottom: 12px;
   padding: 6px 10px;
 }
 
 .card-actions {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: auto;
 }
 
 .icon-btn {
@@ -319,7 +364,6 @@ a {
   font-weight: 700;
   height: 36px;
   justify-content: center;
-  margin-top: 20px;
   padding: 0;
   width: 36px;
 }
@@ -639,6 +683,10 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .dashboard-feature {
+    grid-template-columns: 1fr;
+  }
+
   .stats-row {
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   }
@@ -668,6 +716,11 @@ a {
 
   .watch-card h3 {
     font-size: 1.25rem;
+  }
+
+  .watch-card-header {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .tag-row {

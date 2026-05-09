@@ -446,6 +446,8 @@ function createEmptyStateCard(titleText, messageText) {
 
 function createWatchCard(item) {
   const card = document.createElement("article");
+  const cardHeader = document.createElement("div");
+  const cardBody = document.createElement("div");
   const meta = document.createElement("p");
   const title = document.createElement("h3");
   const status = document.createElement("p");
@@ -464,15 +466,18 @@ function createWatchCard(item) {
   ]);
 
   card.classList.add("watch-card");
+  cardHeader.classList.add("watch-card-header");
+  cardBody.classList.add("watch-card-body");
   meta.classList.add("card-meta");
   status.classList.add("status-badge");
+  notes.classList.add("card-notes");
   tagRow.classList.add("tag-row");
   cardActions.classList.add("card-actions");
 
   meta.textContent = `${item.type} • ${item.platform}`;
   title.textContent = item.title;
   status.textContent = item.status;
-  notes.textContent = item.notes;
+  notes.textContent = item.notes || "No notes added yet.";
 
   item.moods.forEach(mood => {
     const tag = document.createElement("span");
@@ -483,11 +488,15 @@ function createWatchCard(item) {
   cardActions.appendChild(editButton);
   cardActions.appendChild(deleteButton);
 
-  card.appendChild(meta);
-  card.appendChild(title);
-  card.appendChild(status);
-  card.appendChild(notes);
-  card.appendChild(tagRow);
+  cardHeader.appendChild(title);
+  cardHeader.appendChild(status);
+
+  cardBody.appendChild(meta);
+  cardBody.appendChild(notes);
+  cardBody.appendChild(tagRow);
+
+  card.appendChild(cardHeader);
+  card.appendChild(cardBody);
   card.appendChild(cardActions);
 
   return card;

@@ -11,10 +11,6 @@
     <nav class="nav">
       <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
 
-      <div class="nav-links">
-        <a href="add.html">Add Watch</a>
-      </div>
-
       <div id="authArea" class="auth-area"></div>
     </nav>
   </header>
@@ -26,12 +22,21 @@
 
     <section id="dashboardStats" class="stats-row" aria-label="Watchlist stats"></section>
 
-    <section class="hero-card dashboard-pick">
-      <p class="card-label">Genie's Current Pick</p>
-      <h2 id="geniePickTitle">Loading pick...</h2>
-      <p id="geniePickNotes">Checking your saved watchlist.</p>
+    <section class="dashboard-feature">
+      <div class="hero-card dashboard-pick">
+        <p class="card-label">Genie's Current Pick</p>
+        <h2 id="geniePickTitle">Loading pick...</h2>
+        <p id="geniePickNotes">Checking your saved watchlist.</p>
 
-      <div id="geniePickTags" class="tag-row"></div>
+        <div id="geniePickTags" class="tag-row"></div>
+      </div>
+
+      <div class="add-watch-panel">
+        <p class="card-label">Build your list</p>
+        <h2>Add something new</h2>
+        <p>Save the next movie, show, video, or comfort rewatch before you forget it.</p>
+        <a href="add.html" class="btn primary-btn">Add Watch</a>
+      </div>
     </section>
 
     <p class="dashboard-helper-text">Filter your saved movies, shows, videos, and comfort rewatches by mood.</p>
