@@ -7,11 +7,15 @@ JeNieCast is a HTML, CSS, and JavaScript web app for saving movies, shows, video
 - Save watch items with a title, type, platform, mood tags, status, and notes.
 - View saved items on a dashboard.
 - Filter the dashboard by mood.
+- Search the dashboard by title, platform, type, status, notes, or mood.
 - Edit saved items.
 - Delete saved items with a confirmation prompt.
 - Show a random saved item as the homepage "Tonight's Genie Pick".
+- Show different empty-state messages for empty watchlists, filters, and searches.
 - Store data in the browser with `localStorage`.
 - Seed starter items only once for first-time users.
+- Repair invalid `localStorage` data back to an empty watchlist.
+- Share Type and Status options between Add and Edit forms.
 - Render user-entered text with safer DOM methods instead of HTML injection.
 
 ## Current Tech Stack
@@ -37,6 +41,8 @@ It also uses this key to avoid reloading starter/demo items after the first run:
 jeniecastStarterItemsLoaded
 ```
 
+If stored data is corrupted or is not an array, the app repairs the watchlist back to an empty list instead of crashing.
+
 This is good for early development, but it is not a replacement for real accounts or shared storage. A future version should move user data to a backend database with authentication.
 
 ## Future Direction
@@ -48,5 +54,5 @@ Planned improvements include:
 - Shared or cloud-synced watchlists.
 - Better recommendation logic.
 - More dashboard filters.
-- Search and sorting.
+- Sorting.
 - Optional import/export.
