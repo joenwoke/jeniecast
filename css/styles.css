@@ -178,24 +178,32 @@ a {
 }
 
 .stat-card {
+  align-items: baseline;
   background: #1a1724;
   border: 1px solid #342f43;
   border-radius: 10px;
+  display: flex;
+  gap: 6px;
   padding: 10px 12px;
 }
 
 .stat-card strong {
   color: #ffb86c;
-  display: block;
+  display: inline;
   font-size: 1.15rem;
   line-height: 1;
-  margin-bottom: 4px;
+  order: 2;
 }
 
 .stat-card span {
   color: #cfc7bd;
   font-size: 0.72rem;
   font-weight: 700;
+  order: 1;
+}
+
+.stat-card span::after {
+  content: ":";
 }
 
 .grid {
