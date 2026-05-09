@@ -23,6 +23,7 @@ addWatchForm.addEventListener("submit", event => {
 
   const newWatchItem = {
     id: createWatchItemId(),
+    createdAt: createCreatedAt(),
     title,
     type,
     platform,

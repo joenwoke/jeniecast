@@ -1,6 +1,7 @@
 const starterWatchItems = [
   {
     id: "starter-the-office",
+    createdAt: 1,
     title: "The Office",
     type: "Series",
     platform: "Netflix",
@@ -10,6 +11,7 @@ const starterWatchItems = [
   },
   {
     id: "starter-john-wick",
+    createdAt: 2,
     title: "John Wick",
     type: "Movie",
     platform: "Prime Video",
@@ -19,6 +21,7 @@ const starterWatchItems = [
   },
   {
     id: "starter-unknown-tiktok-movie",
+    createdAt: 3,
     title: "Unknown TikTok Movie",
     type: "Unknown",
     platform: "TikTok",
@@ -74,6 +77,10 @@ function createWatchItemId() {
   return `watch-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function createCreatedAt() {
+  return Date.now();
+}
+
 function getWatchItems() {
   // Check if there are saved items in localStorage and if the starter items have aleady been loaded to prevent duplicates. 
   const savedItems = localStorage.getItem(watchItemsKey);
@@ -94,14 +101,11 @@ function getWatchItems() {
       return [];
     }
 
-    const itemsWithIds = parsedItems.map(item => {
-      if (item.id) {
-        return item;
-      }
-
+    const itemsWithIds = parsedItems.map((item, index) => {
       return {
         ...item,
-        id: createWatchItemId()
+        id: item.id || createWatchItemId(),
+        createdAt: item.createdAt || index + 1
       };
     });
 

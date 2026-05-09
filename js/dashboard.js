@@ -1,7 +1,8 @@
 // dashboard.js - JavaScript for managing the watch list dashboard
 const watchGrid = document.querySelector("#watchGrid");
-const filterButtons = document.querySelectorAll(".filter-btn");
+const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
+const dashboardSort = document.querySelector("#dashboardSort");
 const editWatchForm = document.querySelector("#editWatchForm");
 const editTitle = document.querySelector("#editTitle");
 const editType = document.querySelector("#editType");
@@ -14,6 +15,7 @@ const cancelEditBtn = document.querySelector("#cancelEditBtn");
 let watchItems = getWatchItems();
 let currentFilter = "All";
 let currentSearchTerm = "";
+let currentSort = "recent";
 // Variable to keep track of the currently editing item ID
 let editingItemId = "";
 
@@ -26,6 +28,48 @@ function getMoodsFromInput(value) {
     .split(",")
     .map(mood => mood.trim())
     .filter(mood => mood !== "");
+}
+
+// Function to get the unique set of moods from all watch items for filter buttons
+function getMoodFilters() {
+  const moodSet = new Set();
+
+  // Iterate through all watch items and add their moods to the set to get unique values
+  watchItems.forEach(item => {
+    item.moods.forEach(mood => {
+      moodSet.add(mood);
+    });
+  });
+
+  // Return an array of moods sorted alphabetically with "All" as the first option
+  return ["All", ...Array.from(moodSet).sort((firstMood, secondMood) => {
+    return firstMood.localeCompare(secondMood);
+  })];
+}
+
+// Function to render filter buttons based on the unique moods from the watch items
+function renderFilterButtons() {
+  const moodFilters = getMoodFilters();
+
+  if (!moodFilters.includes(currentFilter)) {
+    currentFilter = "All";
+  }
+
+  filterRow.replaceChildren();
+  // Create a button for each unique mood filter and add an active class to the currently selected filter
+  moodFilters.forEach(filter => {
+    const button = document.createElement("button");
+    button.classList.add("filter-btn");
+    button.type = "button";
+    button.dataset.filter = filter;
+    button.textContent = filter;
+
+    if (filter === currentFilter) {
+      button.classList.add("active");
+    }
+
+    filterRow.appendChild(button);
+  });
 }
 
 // Function to show the edit form with the details of the selected item
@@ -168,6 +212,25 @@ function itemMatchesSearch(item, searchTerm) {
   return searchableText.includes(searchTerm);
 }
 
+// Function to sort watch items based on the current sort option
+function sortWatchItems(items) {
+  const sortedItems = [...items];
+
+  // Sort items by createdAt for "recent" or alphabetically by the selected field for other sort options
+  sortedItems.sort((firstItem, secondItem) => {
+    if (currentSort === "recent") {
+      return secondItem.createdAt - firstItem.createdAt;
+    }
+
+    const firstValue = firstItem[currentSort] || "";
+    const secondValue = secondItem[currentSort] || "";
+
+    return firstValue.localeCompare(secondValue);
+  });
+
+  return sortedItems;
+}
+
 // Function to determine the appropriate empty state content based on the current filter and search term
 function getEmptyStateContent(filter, searchTerm) {
   if (watchItems.length === 0) {
@@ -213,8 +276,8 @@ function renderWatchItems(filter = "All") {
   // Filter items based on the selected mood filter
   const moodFilteredItems = filter === "All"
     ? watchItems
-    : watchItems.filter(item => item.moods.includes(filter));
-  const filteredItems = moodFilteredItems.filter(item => itemMatchesSearch(item, searchTerm));
+    : watchItems.filter(item => item.moods.includes(filter));  
+  const filteredItems = sortWatchItems(moodFilteredItems.filter(item => itemMatchesSearch(item, searchTerm)));
 
   // If no items match the filter, show a friendly message 
   if (filteredItems.length === 0) {
@@ -267,6 +330,7 @@ watchGrid.addEventListener("click", event => {
   // Remove the item from the watchItems array and update localStorage
   watchItems = watchItems.filter(item => item.id !== itemId);
   saveWatchItems(watchItems);
+  renderFilterButtons();
   renderWatchItems(currentFilter);
 });
 
@@ -295,6 +359,7 @@ editWatchForm.addEventListener("submit", event => {
   // Save the updated watch items, hide the edit form and re-render the items with the current filter
   saveWatchItems(watchItems);
   hideEditForm();
+  renderFilterButtons();
   renderWatchItems(currentFilter);
 });
 
@@ -307,16 +372,24 @@ dashboardSearch.addEventListener("input", () => {
   renderWatchItems(currentFilter);
 });
 
-// Event listeners for filter buttons
-filterButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    filterButtons.forEach(btn => btn.classList.remove("active"));
-    button.classList.add("active");
-
-    // Get the selected filter from the button's data attribute and render items
-    const selectedFilter = button.dataset.filter;
-    renderWatchItems(selectedFilter);
-  });
+// Event listener for sort select to re-render items based on the selected sort option
+dashboardSort.addEventListener("change", () => {
+  currentSort = dashboardSort.value;
+  renderWatchItems(currentFilter);
 });
-// Initial render of watch items on page load
+
+// Event listeners for filter buttons
+filterRow.addEventListener("click", event => {
+  const filterButton = event.target.closest(".filter-btn");
+
+  if (!filterButton) {
+    return;
+  }
+
+  const selectedFilter = filterButton.dataset.filter;
+  renderWatchItems(selectedFilter);
+  renderFilterButtons();
+});
+// Initial render of filter buttons and watch items when the page loads
+renderFilterButtons();
 renderWatchItems();
