@@ -51,6 +51,38 @@ a {
   color: #ffffff;
 }
 
+.auth-area {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.auth-user {
+  color: #cfc7bd;
+  font-size: 0.85rem;
+  font-weight: 700;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-btn {
+  background: transparent;
+  border: 1px solid #403a4f;
+  border-radius: 999px;
+  color: #f8f4ec;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 9px 13px;
+}
+
+.auth-btn:hover {
+  background: #403a4f;
+}
+
 .hero {
   min-height: calc(100vh - 90px);
   padding: 60px 8%;
@@ -648,6 +680,21 @@ a {
   .nav-links {
     flex-wrap: wrap;
     gap: 14px;
+  }
+
+  .auth-area {
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .auth-btn {
+    text-align: center;
+    width: 100%;
+  }
+
+  .auth-user {
+    max-width: 100%;
   }
 
   .page-header h1 {

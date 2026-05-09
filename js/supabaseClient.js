@@ -7,6 +7,15 @@ export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
+function requireSupabaseClient() {
+  if (!supabase) {
+    console.warn("Supabase is not configured. Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY.");
+    return false;
+  }
+
+  return true;
+}
+
 function isExpectedProtectedTableError(error) {
   const protectedErrorCodes = new Set([
     "42501",
@@ -20,6 +29,62 @@ function isExpectedProtectedTableError(error) {
     || message.includes("not authenticated")
     || message.includes("row-level security")
     || message.includes("rls");
+}
+
+export async function signInWithGoogle() {
+  if (!requireSupabaseClient()) {
+    return;
+  }
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin
+    }
+  });
+
+  if (error) {
+    console.error("Google sign-in failed:", error.message);
+  }
+}
+
+export async function signOut() {
+  if (!requireSupabaseClient()) {
+    return;
+  }
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Sign out failed:", error.message);
+  }
+}
+
+export async function getCurrentUser() {
+  if (!requireSupabaseClient()) {
+    return null;
+  }
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    console.error("Could not get current user:", error.message);
+    return null;
+  }
+
+  return data.user;
+}
+
+export function listenToAuthChanges(callback) {
+  if (!requireSupabaseClient()) {
+    return null;
+  }
+
+  const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session?.user || null);
+  });
+
+  return data.subscription;
 }
 
 export async function testSupabaseConnection() {

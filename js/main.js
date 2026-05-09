@@ -1,9 +1,58 @@
-import { testSupabaseConnection } from "./supabaseClient.js";
+import {
+  getCurrentUser,
+  listenToAuthChanges,
+  signInWithGoogle,
+  signOut,
+  testSupabaseConnection
+} from "./supabaseClient.js";
+
 testSupabaseConnection();
 
 const geniePickTitle = document.querySelector("#geniePickTitle");
 const geniePickNotes = document.querySelector("#geniePickNotes");
 const geniePickTags = document.querySelector("#geniePickTags");
+const authArea = document.querySelector("#authArea");
+
+function getUserDisplayName(user) {
+  return user.user_metadata?.full_name
+    || user.user_metadata?.name
+    || user.email
+    || "Signed in";
+}
+
+function renderAuthArea(user) {
+  authArea.replaceChildren();
+
+  if (!user) {
+    const signInButton = document.createElement("button");
+    signInButton.classList.add("auth-btn");
+    signInButton.type = "button";
+    signInButton.textContent = "Sign in with Google";
+    signInButton.addEventListener("click", signInWithGoogle);
+    authArea.appendChild(signInButton);
+    return;
+  }
+
+  const userText = document.createElement("span");
+  const signOutButton = document.createElement("button");
+
+  userText.classList.add("auth-user");
+  userText.textContent = getUserDisplayName(user);
+
+  signOutButton.classList.add("auth-btn");
+  signOutButton.type = "button";
+  signOutButton.textContent = "Sign out";
+  signOutButton.addEventListener("click", signOut);
+
+  authArea.appendChild(userText);
+  authArea.appendChild(signOutButton);
+}
+
+async function initializeAuthArea() {
+  const user = await getCurrentUser();
+  renderAuthArea(user);
+  listenToAuthChanges(renderAuthArea);
+}
 
 // Funnction to retrieve watch items
 function renderGeniePick() {
@@ -35,4 +84,5 @@ function renderGeniePick() {
 }
 
 // Initial render of the genie pick when the page loads
+initializeAuthArea();
 renderGeniePick();
