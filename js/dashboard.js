@@ -1,4 +1,5 @@
 const watchGrid = document.querySelector("#watchGrid");
+const dashboardStats = document.querySelector("#dashboardStats");
 const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
@@ -72,11 +73,47 @@ function renderFilterButtons() {
   });
 }
 
+function getStatusCount(status) {
+  return watchItems.filter(item => item.status === status).length;
+}
+
+function createStatCard(label, value) {
+  const card = document.createElement("article");
+  const valueElement = document.createElement("strong");
+  const labelElement = document.createElement("span");
+
+  card.classList.add("stat-card");
+  valueElement.textContent = value;
+  labelElement.textContent = label;
+
+  card.appendChild(valueElement);
+  card.appendChild(labelElement);
+
+  return card;
+}
+
+function renderDashboardStats() {
+  const stats = [
+    { label: "Total saved", value: watchItems.length },
+    { label: "Want to Watch", value: getStatusCount("Want to Watch") },
+    { label: "Watching", value: getStatusCount("Watching") },
+    { label: "Finished", value: getStatusCount("Finished") },
+    { label: "Rewatchable", value: getStatusCount("Rewatchable") }
+  ];
+
+  dashboardStats.replaceChildren();
+
+  stats.forEach(stat => {
+    dashboardStats.appendChild(createStatCard(stat.label, stat.value));
+  });
+}
+
 function updateClearSearchButton() {
   clearSearchBtn.hidden = currentSearchTerm === "";
 }
 
 function refreshDashboard() {
+  renderDashboardStats();
   renderFilterButtons();
   renderWatchItems(currentFilter);
 }
