@@ -42,7 +42,20 @@ function getWatchItems() {
   const starterItemsLoaded = localStorage.getItem(starterItemsLoadedKey);
 
   if (savedItems) {
-    const parsedItems = JSON.parse(savedItems);
+    let parsedItems;
+
+    try {
+      parsedItems = JSON.parse(savedItems);
+    } catch (error) {
+      saveWatchItems([]);
+      return [];
+    }
+
+    if (!Array.isArray(parsedItems)) {
+      saveWatchItems([]);
+      return [];
+    }
+
     const itemsWithIds = parsedItems.map(item => {
       if (item.id) {
         return item;
