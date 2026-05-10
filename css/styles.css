@@ -213,6 +213,10 @@ a {
   margin-top: 10px;
 }
 
+.dashboard-overview-header {
+  max-width: 780px;
+}
+
 .add-page {
   margin: 0 auto;
   max-width: 880px;
@@ -259,7 +263,7 @@ a {
   align-items: stretch;
   display: grid;
   gap: 18px;
-  grid-template-columns: minmax(280px, 420px) minmax(240px, 320px);
+  grid-template-columns: minmax(280px, 420px) minmax(280px, 420px);
   margin-bottom: 28px;
 }
 
@@ -272,7 +276,8 @@ a {
   font-size: 1.55rem;
 }
 
-.add-watch-panel {
+.add-watch-panel,
+.quick-actions-panel {
   background: #1a1724;
   border: 1px solid #342f43;
   border-radius: 20px;
@@ -293,10 +298,58 @@ a {
   margin-top: 20px;
 }
 
+.quick-actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quick-action-card {
+  border: 1px solid #403a4f;
+  border-radius: 16px;
+  display: block;
+  padding: 16px;
+}
+
+.quick-action-card:hover {
+  background: #211f2d;
+}
+
+.quick-action-card span {
+  color: #ffb86c;
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.quick-action-card strong {
+  color: #f8f4ec;
+  display: block;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
 .dashboard-helper-text {
   color: #cfc7bd;
   line-height: 1.6;
   margin-bottom: 18px;
+}
+
+.dashboard-section-heading {
+  align-items: flex-end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin: 32px 0 18px;
+}
+
+.dashboard-section-heading h2 {
+  font-size: 1.5rem;
+}
+
+.recent-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .stat-card {
@@ -726,6 +779,11 @@ a {
 
   .dashboard-feature {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .stats-row {
