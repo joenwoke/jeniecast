@@ -132,7 +132,7 @@ async function saveSupabaseWatchItem(newWatchItem, user) {
 
   console.info("Saved watch item to Supabase.");
   addWatchForm.reset();
-  window.location.href = "dashboard.html";
+  window.location.href = "vault.html";
 }
 
 addWatchForm.addEventListener("submit", async event => {
