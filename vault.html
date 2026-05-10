@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JeNieCast Movie Vault</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header protected-content" hidden>
+    <nav class="nav">
+      <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
+
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="add.html">Add Watch</a>
+      </div>
+
+      <div id="authArea" class="auth-area"></div>
+    </nav>
+  </header>
+
+  <div id="protectedLoading" class="protected-loading" role="status">Checking your account...</div>
+
+  <main class="page protected-content" hidden>
+    <section class="page-header">
+      <h1>Movie Vault</h1>
+      <p>Browse, search, filter, edit, and back up your full saved collection.</p>
+    </section>
+
+    <section id="dashboardStats" class="stats-row" aria-label="Watchlist stats"></section>
+
+    <p class="dashboard-helper-text">Filter your saved movies, shows, videos, and comfort rewatches by mood.</p>
+
+    <section id="filterRow" class="filter-row"></section>
+
+    <div class="dashboard-controls">
+      <div class="search-row">
+        <label for="dashboardSearch">Search watchlist</label>
+        <div class="search-control">
+          <input id="dashboardSearch" type="search" placeholder="Search title, platform, mood, status, or notes..." />
+          <button id="clearSearchBtn" class="clear-search-btn" type="button" hidden>Clear</button>
+        </div>
+      </div>
+
+      <div class="sort-row">
+        <label for="dashboardSort">Sort by</label>
+        <div class="sort-control">
+          <select id="dashboardSort">
+            <option value="recent">Recently added</option>
+            <option value="title">Title A-Z</option>
+            <option value="type">Type</option>
+            <option value="status">Status</option>
+            <option value="platform">Platform</option>
+          </select>
+          <button id="resetViewBtn" class="reset-view-btn" type="button">Reset view</button>
+        </div>
+      </div>
+    </div>
+
+    <form id="editWatchForm" class="form edit-form" hidden>
+      <h2>Edit watch item</h2>
+
+      <div class="form-group">
+        <label for="editTitle">Title</label>
+        <input id="editTitle" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label for="editType">Type</label>
+        <select id="editType" required></select>
+      </div>
+
+      <div class="form-group">
+        <label for="editPlatform">Platform</label>
+        <input id="editPlatform" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label for="editMoods">Mood tags</label>
+        <input id="editMoods" type="text" required />
+      </div>
+
+      <div class="form-group">
+        <label for="editStatus">Status</label>
+        <select id="editStatus" required></select>
+      </div>
+
+      <div class="form-group">
+        <label for="editNotes">Notes</label>
+        <textarea id="editNotes"></textarea>
+      </div>
+
+      <p id="editFormMessage" class="form-message error" role="status" hidden></p>
+
+      <div class="form-actions">
+        <button type="submit" class="btn primary-btn">Save Changes</button>
+        <button id="cancelEditBtn" type="button" class="btn secondary-btn">Cancel</button>
+      </div>
+    </form>
+
+    <section id="watchGrid" class="grid"></section>
+
+    <section class="backup-section">
+      <div class="backup-row">
+        <span>Backup</span>
+        <p class="backup-description">
+          Export your saved watchlist as a JSON file, or import a JeNieCast JSON backup to replace your current watchlist.
+        </p>
+        <div class="backup-actions">
+          <button id="exportWatchlistBtn" class="backup-btn" type="button">Export watchlist JSON</button>
+          <button id="importWatchlistBtn" class="backup-btn" type="button">Import watchlist JSON</button>
+          <input id="importWatchlistInput" type="file" accept="application/json,.json" hidden />
+        </div>
+        <p id="backupMessage" class="backup-message" role="status" hidden></p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/vault.js"></script>
+</body>
+</html>
