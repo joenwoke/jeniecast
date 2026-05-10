@@ -7,6 +7,7 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, "index.html"),
         dashboard: resolve(__dirname, "dashboard.html"),
+        vault: resolve(__dirname, "vault.html"),
         add: resolve(__dirname, "add.html")
       }
     }
