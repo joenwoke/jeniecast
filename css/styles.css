@@ -234,6 +234,8 @@ a {
   color: #cfc7bd;
   font-size: 0.9rem;
   font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .back-link:hover {
