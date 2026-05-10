@@ -169,6 +169,10 @@ a {
   line-height: 1.6;
 }
 
+.hero-card .card-label {
+  color: #ffb86c;
+}
+
 .hero-card .btn {
   margin-top: 24px;
 }
@@ -431,6 +435,7 @@ a {
 }
 
 .status-badge {
+  align-self: flex-start;
   display: inline-block;
   background: #2c2738;
   border: 1px solid #403a4f;
