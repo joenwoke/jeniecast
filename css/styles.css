@@ -193,6 +193,12 @@ a {
   padding: 40px 8%;
 }
 
+.protected-loading {
+  color: #cfc7bd;
+  font-weight: 700;
+  padding: 40px 8%;
+}
+
 .page-header {
   margin-bottom: 32px;
 }

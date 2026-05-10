@@ -11,6 +11,8 @@ const typeSelect = document.querySelector("#type");
 const statusSelect = document.querySelector("#status");
 const addFormMessage = document.querySelector("#addFormMessage");
 const authArea = document.querySelector("#authArea");
+const protectedLoading = document.querySelector("#protectedLoading");
+const protectedContent = document.querySelectorAll(".protected-content");
 
 populateSelectOptions(typeSelect, watchTypes, "Choose type");
 populateSelectOptions(statusSelect, watchStatuses, "Choose status");
@@ -19,6 +21,14 @@ let currentUser = null;
 
 function redirectToHome() {
   window.location.href = "index.html";
+}
+
+function showProtectedContent() {
+  protectedLoading.hidden = true;
+
+  protectedContent.forEach(element => {
+    element.hidden = false;
+  });
 }
 
 function getUserDisplayName(user) {
@@ -62,6 +72,7 @@ async function requireSignedInUser() {
 
   currentUser = user;
   renderSignedInAuthArea(user);
+  showProtectedContent();
   return user;
 }
 

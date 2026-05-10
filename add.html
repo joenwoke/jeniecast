@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header protected-content" hidden>
     <nav class="nav">
       <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
 
@@ -15,7 +15,9 @@
     </nav>
   </header>
 
-  <main class="page add-page">
+  <div id="protectedLoading" class="protected-loading" role="status">Checking your account...</div>
+
+  <main class="page add-page protected-content" hidden>
     <section class="page-header">
       <h1>Add something to watch</h1>
       <p>Save a movie, show, YouTube video, anime, documentary, or even something you forgot the name of.</p>

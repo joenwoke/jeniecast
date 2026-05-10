@@ -31,6 +31,8 @@ const geniePickTitle = document.querySelector("#geniePickTitle");
 const geniePickNotes = document.querySelector("#geniePickNotes");
 const geniePickTags = document.querySelector("#geniePickTags");
 const authArea = document.querySelector("#authArea");
+const protectedLoading = document.querySelector("#protectedLoading");
+const protectedContent = document.querySelectorAll(".protected-content");
 
 let watchItems = [];
 let currentUser = null;
@@ -45,6 +47,14 @@ populateSelectOptions(editStatus, watchStatuses);
 // State helpers
 function redirectToHome() {
   window.location.href = "index.html";
+}
+
+function showProtectedContent() {
+  protectedLoading.hidden = true;
+
+  protectedContent.forEach(element => {
+    element.hidden = false;
+  });
 }
 
 function getUserDisplayName(user) {
@@ -88,6 +98,7 @@ async function requireSignedInUser() {
 
   currentUser = user;
   renderSignedInAuthArea(user);
+  showProtectedContent();
   return user;
 }
 
