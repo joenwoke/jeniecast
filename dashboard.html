@@ -11,6 +11,11 @@
     <nav class="nav">
       <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
 
+      <div class="nav-links">
+        <a href="vault.html">Movie Vault</a>
+        <a href="add.html">Add Watch</a>
+      </div>
+
       <div id="authArea" class="auth-area"></div>
     </nav>
   </header>
@@ -18,8 +23,10 @@
   <div id="protectedLoading" class="protected-loading" role="status">Checking your account...</div>
 
   <main class="page protected-content" hidden>
-    <section class="page-header">
+    <section class="page-header dashboard-overview-header">
+      <p class="eyebrow">Your watchlist overview</p>
       <h1>Your watch dashboard</h1>
+      <p>See what you have saved, get a quick pick, and jump into the Movie Vault when you need the whole collection.</p>
     </section>
 
     <section id="dashboardStats" class="stats-row" aria-label="Watchlist stats"></section>
@@ -33,99 +40,28 @@
         <div id="geniePickTags" class="tag-row"></div>
       </div>
 
-      <div class="add-watch-panel">
-        <p class="card-label">Build your list</p>
-        <h2>Add something new</h2>
-        <p>Save the next movie, show, video, or comfort rewatch before you forget it.</p>
-        <a href="add.html" class="btn primary-btn">Add Watch</a>
+      <div class="quick-actions-panel">
+        <p class="card-label">Quick actions</p>
+        <a href="add.html" class="quick-action-card">
+          <span>Add Watch</span>
+          <strong>Save a movie, show, video, or comfort rewatch.</strong>
+        </a>
+        <a href="vault.html" class="quick-action-card">
+          <span>Movie Vault</span>
+          <strong>Browse, search, filter, edit, and back up your full collection.</strong>
+        </a>
       </div>
     </section>
 
-    <p class="dashboard-helper-text">Filter your saved movies, shows, videos, and comfort rewatches by mood.</p>
-
-    <section id="filterRow" class="filter-row"></section>
-
-    <div class="dashboard-controls">
-      <div class="search-row">
-        <label for="dashboardSearch">Search watchlist</label>
-        <div class="search-control">
-          <input id="dashboardSearch" type="search" placeholder="Search title, platform, mood, status, or notes..." />
-          <button id="clearSearchBtn" class="clear-search-btn" type="button" hidden>Clear</button>
-        </div>
+    <section class="dashboard-section-heading">
+      <div>
+        <p class="card-label">Recently Added</p>
+        <h2>Latest saves</h2>
       </div>
-
-      <div class="sort-row">
-        <label for="dashboardSort">Sort by</label>
-        <div class="sort-control">
-          <select id="dashboardSort">
-            <option value="recent">Recently added</option>
-            <option value="title">Title A-Z</option>
-            <option value="type">Type</option>
-            <option value="status">Status</option>
-            <option value="platform">Platform</option>
-          </select>
-          <button id="resetViewBtn" class="reset-view-btn" type="button">Reset view</button>
-        </div>
-      </div>
-    </div>
-
-    <form id="editWatchForm" class="form edit-form" hidden>
-      <h2>Edit watch item</h2>
-
-      <div class="form-group">
-        <label for="editTitle">Title</label>
-        <input id="editTitle" type="text" required />
-      </div>
-
-      <div class="form-group">
-        <label for="editType">Type</label>
-        <select id="editType" required></select>
-      </div>
-
-      <div class="form-group">
-        <label for="editPlatform">Platform</label>
-        <input id="editPlatform" type="text" required />
-      </div>
-
-      <div class="form-group">
-        <label for="editMoods">Mood tags</label>
-        <input id="editMoods" type="text" required />
-      </div>
-
-      <div class="form-group">
-        <label for="editStatus">Status</label>
-        <select id="editStatus" required></select>
-      </div>
-
-      <div class="form-group">
-        <label for="editNotes">Notes</label>
-        <textarea id="editNotes"></textarea>
-      </div>
-
-      <p id="editFormMessage" class="form-message error" role="status" hidden></p>
-
-      <div class="form-actions">
-        <button type="submit" class="btn primary-btn">Save Changes</button>
-        <button id="cancelEditBtn" type="button" class="btn secondary-btn">Cancel</button>
-      </div>
-    </form>
-
-    <section id="watchGrid" class="grid"></section>
-
-    <section class="backup-section">
-      <div class="backup-row">
-        <span>Backup</span>
-        <p class="backup-description">
-          Export your saved watchlist as a JSON file, or import a JeNieCast JSON backup to replace your current watchlist.
-        </p>
-        <div class="backup-actions">
-          <button id="exportWatchlistBtn" class="backup-btn" type="button">Export watchlist JSON</button>
-          <button id="importWatchlistBtn" class="backup-btn" type="button">Import watchlist JSON</button>
-          <input id="importWatchlistInput" type="file" accept="application/json,.json" hidden />
-        </div>
-        <p id="backupMessage" class="backup-message" role="status" hidden></p>
-      </div>
+      <a href="vault.html" class="back-link">View full Movie Vault</a>
     </section>
+
+    <section id="recentWatchGrid" class="grid recent-grid"></section>
   </main>
 
   <script type="module" src="js/dashboard.js"></script>
