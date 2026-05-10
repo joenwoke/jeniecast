@@ -207,24 +207,37 @@ a {
   margin-top: 10px;
 }
 
-.page-header-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
 .add-page {
   margin: 0 auto;
-  max-width: 760px;
+  max-width: 880px;
 }
 
 .add-page .page-header {
-  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 680px;
 }
 
 .add-page .form {
   margin: 0 auto;
   width: 100%;
+}
+
+.form-utility-row {
+  display: flex;
+  justify-content: flex-start;
+  margin: -12px auto 16px;
+  max-width: 680px;
+}
+
+.back-link {
+  color: #cfc7bd;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.back-link:hover {
+  color: #ffb86c;
 }
 
 .stats-row {
