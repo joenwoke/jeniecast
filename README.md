@@ -1,87 +1,106 @@
 # JeNieCast
 
-JeNieCast is a HTML, CSS, and JavaScript web app for saving movies, shows, videos, anime, documentaries, and comfort rewatches. The goal is to make it easier to keep a personal watchlist and quickly pick something that fits a mood.
+JeNieCast is an account-based HTML, CSS, and JavaScript web app for saving movies, shows, videos, anime, documentaries, and comfort rewatches. It uses Google sign-in with Supabase Auth so each user can keep a personal watchlist connected to their own account.
+
+Deployed app: `https://jeniecast.vercel.app`
 
 ## Current Features
 
+- Public landing page with one main Get Started sign-in action.
+- Google sign-in through Supabase Auth.
+- Protected Dashboard and Add Watch pages.
+- Logged-out users are redirected back to the landing page from protected pages.
+- Protected pages show a brief "Checking your account..." loading state before rendering account content.
 - Save watch items with a title, type, platform, mood tags, status, and notes.
+- Store signed-in user watch items in the Supabase `watch_items` table.
+- Use the authenticated Supabase user id as `user_id` so Row Level Security can enforce ownership.
 - View saved items on a dashboard.
 - See dashboard counts for total saved items, visible results, and key statuses.
-- Filter the dashboard by saved mood tags.
-- Search the dashboard by title, platform, type, status, notes, or mood.
+- Show Genie’s Current Pick on the dashboard using only the signed-in user’s saved Supabase items.
+- Add a new watch item from a dashboard action panel or the Add Watch page.
+- Filter the dashboard by saved mood tags, including new tags typed by the user.
+- Search by title, platform, type, status, notes, or mood.
 - Clear dashboard search without resetting the active mood filter or sort option.
 - Reset dashboard view back to all items, no search, and recently added sort.
 - Sort dashboard results by recently added, title, type, status, or platform.
-- Build mood filter buttons from the tags saved on watch items.
-- Edit saved items.
-- Delete saved items with a confirmation prompt.
+- Edit saved items in Supabase.
+- Delete saved items from Supabase with a confirmation prompt.
 - Prevent duplicate saved items with the same title and platform.
-- Export and import watchlists as JSON for backup.
+- Export the signed-in user’s current watchlist as JSON.
+- Import a JeNieCast JSON backup to replace the signed-in user’s current watchlist.
 - Show inline success and error messages for backup actions.
-- Show a random saved item as the homepage "Tonight's Genie Pick".
-- Show different empty-state messages for empty watchlists, filters, and searches.
-- Store data in the browser with `localStorage`.
-- Seed starter items only once for first-time users.
-- Repair invalid `localStorage` data back to an empty watchlist.
-- Share Type and Status options between Add and Edit forms.
-- Render user-entered text with safer DOM methods instead of HTML injection.
+- Render user-entered text with DOM methods instead of HTML injection.
 
-## Current Tech Stack
+## Tech Stack
 
 - HTML
 - CSS
 - JavaScript
-- Browser `localStorage`
+- Vite
+- Supabase Auth
+- Supabase Database
+- Vercel
 
-This project intentionally does not use React or another frontend framework yet.
+This project intentionally stays in HTML, CSS, and JavaScript. It does not use React.
 
 ## Data Storage
 
-JeNieCast currently stores watch items in browser `localStorage` under:
+JeNieCast now uses Supabase as the normal app data source.
+
+The main table is:
 
 ```text
-jeniecastItems
+public.watch_items
 ```
 
-It also uses this key to avoid reloading starter/demo items after the first run:
+Each row belongs to a signed-in user through:
 
 ```text
-jeniecastStarterItemsLoaded
+user_id
 ```
 
-If stored data is corrupted or is not an array, the app repairs the watchlist back to an empty list instead of crashing.
+Supabase Row Level Security should allow authenticated users to select, insert, update, and delete only their own rows.
 
-This is good for early development, but it is not a replacement for real accounts or shared storage. A future version should move user data to a backend database with authentication.
+The previous anonymous `localStorage` starter flow has been removed from the active app. New browsers should not receive fake starter data such as sample movies or sample Genie picks.
 
-## Production Smoke Test
+## Environment Variables
 
-Deployed app: `https://jeniecast.vercel.app`
+The Vite frontend expects these environment variables:
 
-Use this checklist after deploying changes:
+```text
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+```
 
-- Open the deployed app and confirm the homepage loads.
-- Open the dashboard.
-- Add a new watch item with a new mood tag.
-- Confirm the new item appears on the dashboard.
-- Confirm the new mood tag appears as a filter.
-- Search for the new item, then clear the search.
-- Sort by title, platform, status, and recently added.
-- Edit the item and confirm the dashboard updates.
-- Try to save a duplicate title and platform, and confirm it is blocked.
-- Export the watchlist as JSON.
-- Import a valid JSON watchlist and confirm the inline success message appears.
-- Try importing invalid JSON and confirm the inline error message appears.
-- Delete an item and confirm the delete prompt appears.
-- Refresh the page and confirm saved data still appears.
+For Vercel, add both variables in the project settings before deploying.
 
-Current data is stored in each browser's `localStorage`, so smoke tests affect only the browser and device being used.
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the app locally:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
 
 ## Future Direction
 
 Planned improvements include:
 
-- User accounts and login.
-- Backend data storage.
-- Shared or cloud-synced watchlists.
-- Better recommendation logic.
+- LocalStorage-to-Supabase migration/import for older users who saved data before accounts.
+- More fields such as source link, rating, and rewatchable flags.
+- Better recommendation logic for Genie’s Current Pick.
 - More dashboard filters.
+- Better loading and error states.
+- Additional signed-in pages if the app grows.
