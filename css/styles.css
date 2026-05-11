@@ -369,6 +369,18 @@ a {
   padding: 10px 12px;
 }
 
+.filter-stat {
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.filter-stat:hover,
+.filter-stat.active {
+  border-color: #ffb86c;
+}
+
 .stat-card strong {
   color: #ffb86c;
   display: inline;
