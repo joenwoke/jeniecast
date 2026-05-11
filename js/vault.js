@@ -12,7 +12,6 @@ const dashboardStats = document.querySelector("#dashboardStats");
 const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
-const statusFilter = document.querySelector("#statusFilter");
 const dashboardSort = document.querySelector("#dashboardSort");
 const resetViewBtn = document.querySelector("#resetViewBtn");
 const exportWatchlistBtn = document.querySelector("#exportWatchlistBtn");
@@ -185,14 +184,20 @@ function getStatusCount(status) {
   return watchItems.filter(item => item.status === status).length;
 }
 
-function createStatCard(label, value) {
-  const card = document.createElement("article");
+function createStatCard(label, value, status = "") {
+  const card = document.createElement("button");
   const valueElement = document.createElement("strong");
   const labelElement = document.createElement("span");
 
-  card.classList.add("stat-card");
+  card.classList.add("stat-card", "filter-stat");
+  card.type = "button";
+  card.dataset.status = status;
   valueElement.textContent = value;
   labelElement.textContent = label;
+
+  if (status === currentStatus) {
+    card.classList.add("active");
+  }
 
   card.appendChild(valueElement);
   card.appendChild(labelElement);
@@ -200,20 +205,19 @@ function createStatCard(label, value) {
   return card;
 }
 
-function renderDashboardStats(visibleCount) {
+function renderDashboardStats() {
   const stats = [
-    { label: "All", value: watchItems.length },
-    { label: "Showing", value: visibleCount },
-    { label: "Want to Watch", value: getStatusCount("Want to Watch") },
-    { label: "Watching", value: getStatusCount("Watching") },
-    { label: "Finished", value: getStatusCount("Finished") },
-    { label: "Rewatchable", value: getStatusCount("Rewatchable") }
+    { label: "All", value: watchItems.length, status: "All" },
+    { label: "Want to Watch", value: getStatusCount("Want to Watch"), status: "Want to Watch" },
+    { label: "Watching", value: getStatusCount("Watching"), status: "Watching" },
+    { label: "Finished", value: getStatusCount("Finished"), status: "Finished" },
+    { label: "Rewatchable", value: getStatusCount("Rewatchable"), status: "Rewatchable" }
   ];
 
   dashboardStats.replaceChildren();
 
   stats.forEach(stat => {
-    dashboardStats.appendChild(createStatCard(stat.label, stat.value));
+    dashboardStats.appendChild(createStatCard(stat.label, stat.value, stat.status));
   });
 }
 
@@ -585,7 +589,7 @@ function renderWatchItems(filter = "All") {
   const visibleItems = getVisibleWatchItems(filter);
   const filteredItems = sortWatchItems(visibleItems);
 
-  renderDashboardStats(visibleItems.length);
+  renderDashboardStats();
 
   if (filteredItems.length === 0) {
     const emptyState = getEmptyStateContent(filter, currentStatus, searchTerm);
@@ -694,18 +698,12 @@ dashboardSort.addEventListener("change", () => {
   renderWatchItems(currentFilter);
 });
 
-statusFilter.addEventListener("change", () => {
-  currentStatus = statusFilter.value;
-  renderWatchItems(currentFilter);
-});
-
 resetViewBtn.addEventListener("click", () => {
   currentFilter = "All";
   currentStatus = "All";
   currentSearchTerm = "";
   currentSort = "recent";
   dashboardSearch.value = "";
-  statusFilter.value = currentStatus;
   dashboardSort.value = currentSort;
   updateClearSearchButton();
   refreshDashboard();
@@ -737,6 +735,17 @@ filterRow.addEventListener("click", event => {
   const selectedFilter = filterButton.dataset.filter;
   renderWatchItems(selectedFilter);
   renderFilterButtons();
+});
+
+dashboardStats.addEventListener("click", event => {
+  const statCard = event.target.closest(".filter-stat");
+
+  if (!statCard) {
+    return;
+  }
+
+  currentStatus = statCard.dataset.status || "All";
+  renderWatchItems(currentFilter);
 });
 
 async function initializeDashboard() {
