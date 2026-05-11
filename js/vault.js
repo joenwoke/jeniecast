@@ -12,6 +12,7 @@ const dashboardStats = document.querySelector("#dashboardStats");
 const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
+const statusFilter = document.querySelector("#statusFilter");
 const dashboardSort = document.querySelector("#dashboardSort");
 const resetViewBtn = document.querySelector("#resetViewBtn");
 const exportWatchlistBtn = document.querySelector("#exportWatchlistBtn");
@@ -34,6 +35,7 @@ const protectedContent = document.querySelectorAll(".protected-content");
 let watchItems = [];
 let currentUser = null;
 let currentFilter = "All";
+let currentStatus = "All";
 let currentSearchTerm = "";
 let currentSort = "recent";
 let editingItemId = "";
@@ -522,7 +524,7 @@ function sortWatchItems(items) {
   return sortedItems;
 }
 
-function getEmptyStateContent(filter, searchTerm) {
+function getEmptyStateContent(filter, status, searchTerm) {
   if (watchItems.length === 0) {
     return {
       title: "Your watchlist is empty",
@@ -530,10 +532,10 @@ function getEmptyStateContent(filter, searchTerm) {
     };
   }
 
-  if (filter !== "All" && searchTerm) {
+  if ((filter !== "All" || status !== "All") && searchTerm) {
     return {
-      title: `No matches in ${filter}`,
-      message: "Try a different search term or switch to another mood filter."
+      title: "No filtered search results",
+      message: "Try a different search term, mood filter, or status filter."
     };
   }
 
@@ -551,6 +553,13 @@ function getEmptyStateContent(filter, searchTerm) {
     };
   }
 
+  if (status !== "All") {
+    return {
+      title: `No ${status} items`,
+      message: "Try a different status filter or update a saved item."
+    };
+  }
+
   return {
     title: "No matches found",
     message: "Add more watch items or try a different mood filter."
@@ -562,8 +571,11 @@ function getVisibleWatchItems(filter) {
   const moodFilteredItems = filter === "All"
     ? watchItems
     : watchItems.filter(item => item.moods.includes(filter));
+  const statusFilteredItems = currentStatus === "All"
+    ? moodFilteredItems
+    : moodFilteredItems.filter(item => item.status === currentStatus);
 
-  return moodFilteredItems.filter(item => itemMatchesSearch(item, searchTerm));
+  return statusFilteredItems.filter(item => itemMatchesSearch(item, searchTerm));
 }
 
 function renderWatchItems(filter = "All") {
@@ -576,7 +588,7 @@ function renderWatchItems(filter = "All") {
   renderDashboardStats(visibleItems.length);
 
   if (filteredItems.length === 0) {
-    const emptyState = getEmptyStateContent(filter, searchTerm);
+    const emptyState = getEmptyStateContent(filter, currentStatus, searchTerm);
     watchGrid.appendChild(createEmptyStateCard(emptyState.title, emptyState.message));
     return;
   }
@@ -682,11 +694,18 @@ dashboardSort.addEventListener("change", () => {
   renderWatchItems(currentFilter);
 });
 
+statusFilter.addEventListener("change", () => {
+  currentStatus = statusFilter.value;
+  renderWatchItems(currentFilter);
+});
+
 resetViewBtn.addEventListener("click", () => {
   currentFilter = "All";
+  currentStatus = "All";
   currentSearchTerm = "";
   currentSort = "recent";
   dashboardSearch.value = "";
+  statusFilter.value = currentStatus;
   dashboardSort.value = currentSort;
   updateClearSearchButton();
   refreshDashboard();
