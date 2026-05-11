@@ -9,6 +9,7 @@ import {
 
 const watchGrid = document.querySelector("#watchGrid");
 const dashboardStats = document.querySelector("#dashboardStats");
+const typeFilterRow = document.querySelector("#typeFilterRow");
 const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
@@ -34,6 +35,7 @@ const protectedContent = document.querySelectorAll(".protected-content");
 let watchItems = [];
 let currentUser = null;
 let currentFilter = "All";
+let currentType = "All";
 let currentStatus = "All";
 let currentSearchTerm = "";
 let currentSort = "recent";
@@ -156,6 +158,42 @@ function getMoodFilters() {
   })];
 }
 
+function getTypeFilters() {
+  const typeSet = new Set();
+
+  watchItems.forEach(item => {
+    typeSet.add(item.type);
+  });
+
+  return ["All", ...Array.from(typeSet).sort((firstType, secondType) => {
+    return firstType.localeCompare(secondType);
+  })];
+}
+
+function renderTypeFilterButtons() {
+  const typeFilters = getTypeFilters();
+
+  if (!typeFilters.includes(currentType)) {
+    currentType = "All";
+  }
+
+  typeFilterRow.replaceChildren();
+
+  typeFilters.forEach(filter => {
+    const button = document.createElement("button");
+    button.classList.add("filter-btn");
+    button.type = "button";
+    button.dataset.type = filter;
+    button.textContent = filter === "All" ? "All types" : filter;
+
+    if (filter === currentType) {
+      button.classList.add("active");
+    }
+
+    typeFilterRow.appendChild(button);
+  });
+}
+
 function renderFilterButtons() {
   const moodFilters = getMoodFilters();
 
@@ -226,6 +264,7 @@ function updateClearSearchButton() {
 }
 
 function refreshDashboard() {
+  renderTypeFilterButtons();
   renderFilterButtons();
   renderWatchItems(currentFilter);
 }
@@ -528,7 +567,7 @@ function sortWatchItems(items) {
   return sortedItems;
 }
 
-function getEmptyStateContent(filter, status, searchTerm) {
+function getEmptyStateContent(filter, type, status, searchTerm) {
   if (watchItems.length === 0) {
     return {
       title: "Your watchlist is empty",
@@ -536,10 +575,10 @@ function getEmptyStateContent(filter, status, searchTerm) {
     };
   }
 
-  if ((filter !== "All" || status !== "All") && searchTerm) {
+  if ((filter !== "All" || type !== "All" || status !== "All") && searchTerm) {
     return {
       title: "No filtered search results",
-      message: "Try a different search term, mood filter, or status filter."
+      message: "Try a different search term, mood filter, type filter, or status filter."
     };
   }
 
@@ -554,6 +593,13 @@ function getEmptyStateContent(filter, status, searchTerm) {
     return {
       title: `No ${filter} matches`,
       message: "Add more watch items or try a different mood filter."
+    };
+  }
+
+  if (type !== "All") {
+    return {
+      title: `No ${type} items`,
+      message: "Try a different type filter or add another saved item."
     };
   }
 
@@ -575,9 +621,12 @@ function getVisibleWatchItems(filter) {
   const moodFilteredItems = filter === "All"
     ? watchItems
     : watchItems.filter(item => item.moods.includes(filter));
-  const statusFilteredItems = currentStatus === "All"
+  const typeFilteredItems = currentType === "All"
     ? moodFilteredItems
-    : moodFilteredItems.filter(item => item.status === currentStatus);
+    : moodFilteredItems.filter(item => item.type === currentType);
+  const statusFilteredItems = currentStatus === "All"
+    ? typeFilteredItems
+    : typeFilteredItems.filter(item => item.status === currentStatus);
 
   return statusFilteredItems.filter(item => itemMatchesSearch(item, searchTerm));
 }
@@ -592,7 +641,7 @@ function renderWatchItems(filter = "All") {
   renderDashboardStats();
 
   if (filteredItems.length === 0) {
-    const emptyState = getEmptyStateContent(filter, currentStatus, searchTerm);
+    const emptyState = getEmptyStateContent(filter, currentType, currentStatus, searchTerm);
     watchGrid.appendChild(createEmptyStateCard(emptyState.title, emptyState.message));
     return;
   }
@@ -700,6 +749,7 @@ dashboardSort.addEventListener("change", () => {
 
 resetViewBtn.addEventListener("click", () => {
   currentFilter = "All";
+  currentType = "All";
   currentStatus = "All";
   currentSearchTerm = "";
   currentSort = "recent";
@@ -735,6 +785,18 @@ filterRow.addEventListener("click", event => {
   const selectedFilter = filterButton.dataset.filter;
   renderWatchItems(selectedFilter);
   renderFilterButtons();
+});
+
+typeFilterRow.addEventListener("click", event => {
+  const filterButton = event.target.closest(".filter-btn");
+
+  if (!filterButton) {
+    return;
+  }
+
+  currentType = filterButton.dataset.type;
+  renderWatchItems(currentFilter);
+  renderTypeFilterButtons();
 });
 
 dashboardStats.addEventListener("click", event => {
