@@ -568,6 +568,7 @@ a {
 }
 
 .search-control input,
+.sort-row select,
 .sort-control select {
   background: #111018;
   border: 1px solid #403a4f;
@@ -575,6 +576,7 @@ a {
   color: #f8f4ec;
   font-size: 1rem;
   padding: 13px 14px;
+  width: 100%;
 }
 
 .sort-control {
