@@ -406,6 +406,12 @@ a {
   gap: 24px;
 }
 
+.grid.list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .watch-card {
   background: #1a1724;
   border: 1px solid #342f43;
@@ -432,6 +438,10 @@ a {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.watch-card .tag-row {
+  margin-top: 0;
 }
 
 .watch-card p {
@@ -466,6 +476,26 @@ a {
   display: flex;
   gap: 10px;
   margin-top: auto;
+}
+
+.list-view .watch-card {
+  align-items: start;
+  border-radius: 18px;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(260px, 1.6fr) auto;
+}
+
+.list-view .watch-card-body {
+  gap: 10px;
+}
+
+.list-view .card-notes {
+  min-height: auto;
+}
+
+.list-view .card-actions {
+  justify-self: end;
+  margin-top: 0;
 }
 
 .icon-btn {
@@ -568,8 +598,15 @@ a {
   gap: 8px;
 }
 
+.view-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .search-row label,
 .sort-row label,
+.view-row span,
 .backup-row span {
   font-weight: 700;
 }
@@ -633,6 +670,33 @@ a {
 
 .reset-view-btn:hover {
   background: #403a4f;
+}
+
+.view-toggle {
+  background: #111018;
+  border: 1px solid #403a4f;
+  border-radius: 14px;
+  display: flex;
+  min-height: 48px;
+  padding: 4px;
+}
+
+.view-toggle-btn {
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: #cfc7bd;
+  cursor: pointer;
+  flex: 1;
+  font: inherit;
+  font-weight: 700;
+  padding: 0 12px;
+}
+
+.view-toggle-btn.active,
+.view-toggle-btn:hover {
+  background: #ffb86c;
+  color: #111018;
 }
 
 .sort-row {
@@ -852,6 +916,14 @@ a {
   .watch-card-header {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .list-view .watch-card {
+    display: flex;
+  }
+
+  .list-view .card-actions {
+    justify-self: auto;
   }
 
   .tag-row {

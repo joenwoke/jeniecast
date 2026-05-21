@@ -15,6 +15,8 @@ const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
 const dashboardSort = document.querySelector("#dashboardSort");
 const resetViewBtn = document.querySelector("#resetViewBtn");
+const gridViewBtn = document.querySelector("#gridViewBtn");
+const listViewBtn = document.querySelector("#listViewBtn");
 const exportWatchlistBtn = document.querySelector("#exportWatchlistBtn");
 const importWatchlistBtn = document.querySelector("#importWatchlistBtn");
 const importWatchlistInput = document.querySelector("#importWatchlistInput");
@@ -39,6 +41,7 @@ let currentType = "All";
 let currentStatus = "All";
 let currentSearchTerm = "";
 let currentSort = "recent";
+let currentView = "grid";
 let editingItemId = "";
 
 populateSelectOptions(editType, watchTypes);
@@ -267,6 +270,20 @@ function refreshDashboard() {
   renderTypeFilterButtons();
   renderFilterButtons();
   renderWatchItems(currentFilter);
+}
+
+function updateViewButtons() {
+  const isGrid = currentView === "grid";
+
+  gridViewBtn.classList.toggle("active", isGrid);
+  listViewBtn.classList.toggle("active", !isGrid);
+  gridViewBtn.setAttribute("aria-pressed", String(isGrid));
+  listViewBtn.setAttribute("aria-pressed", String(!isGrid));
+}
+
+function updateWatchGridView() {
+  watchGrid.classList.toggle("list-view", currentView === "list");
+  updateViewButtons();
 }
 
 // Backup helpers
@@ -634,6 +651,7 @@ function getVisibleWatchItems(filter) {
 function renderWatchItems(filter = "All") {
   currentFilter = filter;
   watchGrid.replaceChildren();
+  updateWatchGridView();
   const searchTerm = currentSearchTerm.toLowerCase();
   const visibleItems = getVisibleWatchItems(filter);
   const filteredItems = sortWatchItems(visibleItems);
@@ -744,6 +762,16 @@ clearSearchBtn.addEventListener("click", () => {
 
 dashboardSort.addEventListener("change", () => {
   currentSort = dashboardSort.value;
+  renderWatchItems(currentFilter);
+});
+
+gridViewBtn.addEventListener("click", () => {
+  currentView = "grid";
+  renderWatchItems(currentFilter);
+});
+
+listViewBtn.addEventListener("click", () => {
+  currentView = "list";
   renderWatchItems(currentFilter);
 });
 
