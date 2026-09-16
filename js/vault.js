@@ -14,6 +14,10 @@ const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
 const dashboardSort = document.querySelector("#dashboardSort");
+const filtersBtn = document.querySelector("#filtersBtn");
+const vaultFilters = document.querySelector("#vaultFilters");
+const clearFiltersBtn = document.querySelector("#clearFiltersBtn");
+const activeViewActions = document.querySelector("#activeViewActions");
 const resetViewBtn = document.querySelector("#resetViewBtn");
 const gridViewBtn = document.querySelector("#gridViewBtn");
 const listViewBtn = document.querySelector("#listViewBtn");
@@ -162,7 +166,7 @@ function getMoodFilters() {
 }
 
 function getTypeFilters() {
-  const typeSet = new Set();
+  const typeSet = new Set(["Movie", "Series"]);
 
   watchItems.forEach(item => {
     typeSet.add(item.type);
@@ -187,6 +191,7 @@ function renderTypeFilterButtons() {
     button.classList.add("filter-btn");
     button.type = "button";
     button.dataset.type = filter;
+    button.setAttribute("aria-pressed", String(filter === currentType));
     button.textContent = filter === "All" ? "All types" : filter;
 
     if (filter === currentType) {
@@ -211,6 +216,7 @@ function renderFilterButtons() {
     button.classList.add("filter-btn");
     button.type = "button";
     button.dataset.filter = filter;
+    button.setAttribute("aria-pressed", String(filter === currentFilter));
     button.textContent = filter;
 
     if (filter === currentFilter) {
@@ -233,6 +239,7 @@ function createStatCard(label, value, status = "") {
   card.classList.add("stat-card", "filter-stat");
   card.type = "button";
   card.dataset.status = status;
+  card.setAttribute("aria-pressed", String(status === currentStatus));
   valueElement.textContent = value;
   labelElement.textContent = label;
 
@@ -264,6 +271,18 @@ function renderDashboardStats() {
 
 function updateClearSearchButton() {
   clearSearchBtn.hidden = currentSearchTerm === "";
+}
+
+function updateFilterControls() {
+  const activeCount = [currentType !== "All", currentFilter !== "All"].filter(Boolean).length;
+  filtersBtn.textContent = activeCount ? `Filters (${activeCount})` : "Filters";
+  clearFiltersBtn.hidden = activeCount === 0;
+  activeViewActions.hidden = activeCount === 0 && currentSearchTerm === "" && currentStatus === "All" && currentSort === "recent" && currentView === "grid";
+}
+
+function clearFilters() {
+  currentFilter = "All";
+  currentType = "All";
 }
 
 function refreshDashboard() {
@@ -526,11 +545,19 @@ function createWatchCard(item) {
   status.textContent = item.status;
   notes.textContent = item.notes || "No notes added yet.";
 
-  item.moods.forEach(mood => {
+  item.moods.slice(0, 2).forEach(mood => {
     const tag = document.createElement("span");
     tag.textContent = mood;
     tagRow.appendChild(tag);
   });
+
+  if (item.moods.length > 2) {
+    const moreTags = document.createElement("span");
+    moreTags.textContent = `+${item.moods.length - 2}`;
+    moreTags.setAttribute("aria-label", `${item.moods.length - 2} more tags: ${item.moods.slice(2).join(", ")}`);
+    moreTags.title = item.moods.slice(2).join(", ");
+    tagRow.appendChild(moreTags);
+  }
 
   cardActions.appendChild(editButton);
   cardActions.appendChild(deleteButton);
@@ -657,6 +684,7 @@ function renderWatchItems(filter = "All") {
   const filteredItems = sortWatchItems(visibleItems);
 
   renderDashboardStats();
+  updateFilterControls();
 
   if (filteredItems.length === 0) {
     const emptyState = getEmptyStateContent(filter, currentType, currentStatus, searchTerm);
@@ -775,16 +803,37 @@ listViewBtn.addEventListener("click", () => {
   renderWatchItems(currentFilter);
 });
 
+filtersBtn.addEventListener("click", () => {
+  const expanded = filtersBtn.getAttribute("aria-expanded") === "true";
+  filtersBtn.setAttribute("aria-expanded", String(!expanded));
+  vaultFilters.hidden = expanded;
+});
+
+vaultFilters.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    vaultFilters.hidden = true;
+    filtersBtn.setAttribute("aria-expanded", "false");
+    filtersBtn.focus();
+  }
+});
+
+clearFiltersBtn.addEventListener("click", () => {
+  clearFilters();
+  refreshDashboard();
+  filtersBtn.focus();
+});
+
 resetViewBtn.addEventListener("click", () => {
-  currentFilter = "All";
-  currentType = "All";
+  clearFilters();
   currentStatus = "All";
   currentSearchTerm = "";
-  currentSort = "recent";
   dashboardSearch.value = "";
-  dashboardSort.value = currentSort;
   updateClearSearchButton();
+  currentSort = "recent";
+  currentView = "grid";
+  dashboardSort.value = currentSort;
   refreshDashboard();
+  dashboardSearch.focus();
 });
 
 exportWatchlistBtn.addEventListener("click", exportWatchlist);
@@ -813,6 +862,7 @@ filterRow.addEventListener("click", event => {
   const selectedFilter = filterButton.dataset.filter;
   renderWatchItems(selectedFilter);
   renderFilterButtons();
+  filterRow.querySelector('[aria-pressed="true"]')?.focus();
 });
 
 typeFilterRow.addEventListener("click", event => {
@@ -825,6 +875,7 @@ typeFilterRow.addEventListener("click", event => {
   currentType = filterButton.dataset.type;
   renderWatchItems(currentFilter);
   renderTypeFilterButtons();
+  typeFilterRow.querySelector('[aria-pressed="true"]')?.focus();
 });
 
 dashboardStats.addEventListener("click", event => {
@@ -836,6 +887,7 @@ dashboardStats.addEventListener("click", event => {
 
   currentStatus = statCard.dataset.status || "All";
   renderWatchItems(currentFilter);
+  dashboardStats.querySelector('[aria-pressed="true"]')?.focus();
 });
 
 async function initializeDashboard() {
