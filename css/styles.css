@@ -1057,3 +1057,210 @@ a {
   }
 
 }
+
+/* Movie Vault: compact controls with optional filter details. */
+.vault-page .page-header {
+  margin-bottom: 20px;
+}
+
+.vault-page .stats-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 3px 8px;
+  margin-bottom: 12px;
+}
+
+.vault-page .stat-card {
+  flex: 1 0 auto;
+  min-height: 44px;
+}
+
+.vault-page .stat-card span {
+  font-size: 0.8rem;
+}
+
+.vault-controls {
+  grid-template-columns: minmax(200px, 1fr) auto minmax(160px, 190px) auto;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.vault-controls .search-control {
+  position: relative;
+}
+
+.vault-controls .search-control input {
+  padding-right: 68px;
+}
+
+.vault-controls .clear-search-btn {
+  position: absolute;
+  right: 4px;
+  top: 3px;
+  bottom: 3px;
+  width: auto;
+  min-height: 0;
+  border: 0;
+  padding: 0 10px;
+}
+
+.vault-controls .sort-control select {
+  min-width: 0;
+}
+
+.filters-toggle {
+  background: #1a1724;
+  border: 1px solid #403a4f;
+  border-radius: 14px;
+  color: #f8f4ec;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  min-height: 48px;
+  padding: 10px 16px;
+}
+
+.filters-toggle::after {
+  content: " ▾";
+}
+
+.filters-toggle[aria-expanded="true"]::after {
+  content: " ▴";
+}
+
+.filters-toggle:hover,
+.filters-toggle[aria-expanded="true"] {
+  border-color: #ffb86c;
+}
+
+.vault-filters {
+  background: #1a1724;
+  border: 1px solid #342f43;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.filter-panel-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.filter-panel-heading h2 {
+  font-size: 1.1rem;
+}
+
+.vault-filters h3 {
+  color: #cfc7bd;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.vault-filters .filter-row {
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.vault-filters .filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.vault-filters .filter-btn {
+  font: inherit;
+  font-size: 0.9rem;
+  min-height: 44px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.vault-page [aria-pressed="true"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.vault-page :is(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid #ffb86c;
+  outline-offset: 3px;
+}
+
+.quiet-action {
+  background: transparent;
+  border: 0;
+  color: #cfc7bd;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  min-height: 44px;
+  padding: 8px 4px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.quiet-action:hover {
+  color: #ffb86c;
+}
+
+.active-view-actions {
+  margin: -8px 0 8px;
+  text-align: right;
+}
+
+.vault-page .view-toggle-btn {
+  min-height: 44px;
+}
+
+.vault-page .watch-card {
+  overflow-wrap: anywhere;
+}
+
+.vault-page .icon-btn {
+  width: 44px;
+  height: 44px;
+}
+
+.vault-page [hidden] {
+  display: none !important;
+}
+
+@media (max-width: 1100px) {
+  .vault-controls {
+    grid-template-columns: auto minmax(160px, 1fr) auto;
+  }
+
+  .vault-controls .search-row {
+    grid-column: 1 / -1;
+  }
+
+  .vault-page .list-view .watch-card {
+    display: flex;
+  }
+}
+
+@media (max-width: 600px) {
+  .vault-controls {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .vault-controls .view-row {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .vault-page .stat-card {
+    flex: 0 0 auto;
+  }
+
+  .vault-page .watch-card-header {
+    flex-direction: column;
+  }
+}
