@@ -41,18 +41,6 @@
 
       <button id="filtersBtn" class="filters-toggle" type="button" aria-expanded="false" aria-controls="vaultFilters">Filters</button>
 
-      <div class="sort-row">
-        <label for="dashboardSort">Sort by</label>
-        <div class="sort-control">
-          <select id="dashboardSort">
-            <option value="recent">Recently added</option>
-            <option value="title">Title A-Z</option>
-            <option value="type">Type</option>
-            <option value="platform">Platform</option>
-          </select>
-        </div>
-      </div>
-
       <div class="view-row">
         <span>View</span>
         <div class="view-toggle" role="group" aria-label="Choose Movie Vault layout">
@@ -71,6 +59,11 @@
       <div id="typeFilterRow" class="filter-row" role="group" aria-labelledby="typeFiltersLabel"></div>
       <h3 id="moodFiltersLabel">Mood / tags</h3>
       <div id="filterRow" class="filter-row" role="group" aria-labelledby="moodFiltersLabel"></div>
+      <h3 id="orderLabel">Order</h3>
+      <div id="orderRow" class="filter-row" role="group" aria-labelledby="orderLabel">
+        <button class="filter-btn active" type="button" data-order="recent" aria-pressed="true">Recently added</button>
+        <button class="filter-btn" type="button" data-order="title" aria-pressed="false">Title A-Z</button>
+      </div>
     </section>
 
     <div id="activeViewActions" class="active-view-actions" hidden>

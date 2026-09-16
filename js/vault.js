@@ -13,7 +13,7 @@ const typeFilterRow = document.querySelector("#typeFilterRow");
 const filterRow = document.querySelector("#filterRow");
 const dashboardSearch = document.querySelector("#dashboardSearch");
 const clearSearchBtn = document.querySelector("#clearSearchBtn");
-const dashboardSort = document.querySelector("#dashboardSort");
+const orderRow = document.querySelector("#orderRow");
 const filtersBtn = document.querySelector("#filtersBtn");
 const vaultFilters = document.querySelector("#vaultFilters");
 const clearFiltersBtn = document.querySelector("#clearFiltersBtn");
@@ -274,6 +274,11 @@ function updateClearSearchButton() {
 }
 
 function updateFilterControls() {
+  orderRow.querySelectorAll("[data-order]").forEach(button => {
+    const selected = button.dataset.order === currentSort;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
   const activeCount = [currentType !== "All", currentFilter !== "All"].filter(Boolean).length;
   filtersBtn.textContent = activeCount ? `Filters (${activeCount})` : "Filters";
   clearFiltersBtn.hidden = activeCount === 0;
@@ -595,6 +600,10 @@ function itemMatchesSearch(item, searchTerm) {
 }
 
 function sortWatchItems(items) {
+  if (currentSort !== "recent" && currentSort !== "title") {
+    currentSort = "recent";
+  }
+
   const sortedItems = [...items];
 
   sortedItems.sort((firstItem, secondItem) => {
@@ -788,8 +797,14 @@ clearSearchBtn.addEventListener("click", () => {
   renderWatchItems(currentFilter);
 });
 
-dashboardSort.addEventListener("change", () => {
-  currentSort = dashboardSort.value;
+orderRow.addEventListener("click", event => {
+  const button = event.target.closest("[data-order]");
+
+  if (!button) {
+    return;
+  }
+
+  currentSort = button.dataset.order;
   renderWatchItems(currentFilter);
 });
 
@@ -831,7 +846,6 @@ resetViewBtn.addEventListener("click", () => {
   updateClearSearchButton();
   currentSort = "recent";
   currentView = "grid";
-  dashboardSort.value = currentSort;
   refreshDashboard();
   dashboardSearch.focus();
 });
