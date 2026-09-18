@@ -6,7 +6,7 @@
   <title>JeNieCast Dashboard</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="dashboard-page">
   <header class="site-header protected-content" hidden>
     <nav class="nav">
       <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
@@ -30,26 +30,17 @@
 
     <section id="dashboardStats" class="stats-row" aria-label="Watchlist stats"></section>
 
-    <section class="dashboard-feature">
-      <div class="hero-card dashboard-pick">
-        <p class="card-label">Genie's Current Pick</p>
-        <h2 id="geniePickTitle">Loading pick...</h2>
-        <p id="geniePickNotes">Checking your saved watchlist.</p>
+    <nav class="dashboard-actions" aria-label="Watchlist actions">
+      <a href="add.html" class="dashboard-action">Add Watch</a>
+      <a href="vault.html" class="dashboard-action">Open Movie Vault</a>
+    </nav>
 
-        <div id="geniePickTags" class="tag-row"></div>
-      </div>
-
-      <div class="quick-actions-panel">
-        <p class="card-label">Quick actions</p>
-        <a href="add.html" class="quick-action-card">
-          <span>Add Watch</span>
-          <strong>Save a movie, show, video, or comfort rewatch.</strong>
-        </a>
-        <a href="vault.html" class="quick-action-card">
-          <span>Movie Vault</span>
-          <strong>Browse, search, filter, edit, and back up your full collection.</strong>
-        </a>
-      </div>
+    <section class="dashboard-pick" aria-labelledby="geniePickLabel">
+      <p id="geniePickLabel" class="card-label">Genie's Current Pick</p>
+      <h2 id="geniePickTitle">Loading pick...</h2>
+      <p id="geniePickMeta" class="card-meta" hidden></p>
+      <p id="geniePickNotes">Checking your saved watchlist.</p>
+      <div id="geniePickTags" class="tag-row"></div>
     </section>
 
     <section class="dashboard-section-heading">
