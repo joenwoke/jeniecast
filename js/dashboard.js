@@ -2,6 +2,7 @@ import { getCurrentUser, signOut, supabase } from "./supabaseClient.js";
 
 const dashboardStats = document.querySelector("#dashboardStats");
 const geniePickTitle = document.querySelector("#geniePickTitle");
+const geniePickMeta = document.querySelector("#geniePickMeta");
 const geniePickNotes = document.querySelector("#geniePickNotes");
 const geniePickTags = document.querySelector("#geniePickTags");
 const recentWatchGrid = document.querySelector("#recentWatchGrid");
@@ -135,6 +136,8 @@ function renderDashboardStats() {
 
 function renderGeniePick() {
   geniePickTags.replaceChildren();
+  geniePickMeta.hidden = true;
+  geniePickNotes.hidden = false;
 
   if (watchItems.length === 0) {
     geniePickTitle.textContent = "No saved picks yet";
@@ -146,13 +149,24 @@ function renderGeniePick() {
   const pick = watchItems[randomIndex];
 
   geniePickTitle.textContent = pick.title;
-  geniePickNotes.textContent = pick.notes || `${pick.type} on ${pick.platform}`;
+  geniePickMeta.textContent = `${pick.type} • ${pick.platform}`;
+  geniePickMeta.hidden = false;
+  geniePickNotes.textContent = pick.notes;
+  geniePickNotes.hidden = !pick.notes;
 
-  pick.moods.forEach(mood => {
+  pick.moods.slice(0, 2).forEach(mood => {
     const tag = document.createElement("span");
     tag.textContent = mood;
     geniePickTags.appendChild(tag);
   });
+
+  if (pick.moods.length > 2) {
+    const moreTags = document.createElement("span");
+    moreTags.textContent = `+${pick.moods.length - 2}`;
+    moreTags.setAttribute("aria-label", `${pick.moods.length - 2} more tags: ${pick.moods.slice(2).join(", ")}`);
+    moreTags.title = pick.moods.slice(2).join(", ");
+    geniePickTags.appendChild(moreTags);
+  }
 }
 
 function createPreviewCard(item) {
