@@ -265,25 +265,7 @@ a {
   margin-bottom: 20px;
 }
 
-.dashboard-feature {
-  align-items: stretch;
-  display: grid;
-  gap: 18px;
-  grid-template-columns: minmax(280px, 420px) minmax(280px, 420px);
-  margin-bottom: 28px;
-}
-
-.dashboard-pick {
-  border-radius: 20px;
-  padding: 22px;
-}
-
-.dashboard-pick h2 {
-  font-size: 1.55rem;
-}
-
-.add-watch-panel,
-.quick-actions-panel {
+.add-watch-panel {
   background: #1a1724;
   border: 1px solid #342f43;
   border-radius: 20px;
@@ -302,38 +284,6 @@ a {
 
 .add-watch-panel .btn {
   margin-top: 20px;
-}
-
-.quick-actions-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.quick-action-card {
-  border: 1px solid #403a4f;
-  border-radius: 16px;
-  display: block;
-  padding: 16px;
-}
-
-.quick-action-card:hover {
-  background: #211f2d;
-}
-
-.quick-action-card span {
-  color: #ffb86c;
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.quick-action-card strong {
-  color: #f8f4ec;
-  display: block;
-  font-size: 1rem;
-  line-height: 1.35;
 }
 
 .dashboard-helper-text {
@@ -866,16 +816,11 @@ a {
 
   .page-header h1,
   .dashboard-section-heading h2,
-  .watch-card h3,
-  .quick-action-card strong {
+  .watch-card h3 {
     overflow-wrap: anywhere;
   }
 
   .dashboard-controls {
-    grid-template-columns: 1fr;
-  }
-
-  .dashboard-feature {
     grid-template-columns: 1fr;
   }
 
@@ -1033,7 +978,6 @@ a {
     padding: 9px 10px;
   }
 
-  .dashboard-feature,
   .grid,
   .recent-grid {
     gap: 14px;
@@ -1041,7 +985,6 @@ a {
 
   .dashboard-pick,
   .add-watch-panel,
-  .quick-actions-panel,
   .watch-card,
   .form {
     border-radius: 16px;
@@ -1257,5 +1200,119 @@ a {
 
   .vault-page .watch-card-header {
     flex-direction: column;
+  }
+}
+
+/* Dashboard overview: quiet actions and a compact current pick. */
+.dashboard-page .page-header {
+  margin-bottom: 20px;
+}
+
+.dashboard-page .stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.dashboard-page .stat-card {
+  flex: 1 0 auto;
+  align-items: center;
+  min-height: 44px;
+}
+
+.dashboard-page .stat-card span {
+  font-size: 0.8rem;
+}
+
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.dashboard-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #403a4f;
+  border-radius: 14px;
+  color: #cfc7bd;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.dashboard-action:hover {
+  background: #211f2d;
+  color: #f8f4ec;
+}
+
+.dashboard-pick {
+  background: #1a1724;
+  border: 1px solid #342f43;
+  border-radius: 18px;
+  padding: 18px 20px;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-pick .card-label {
+  margin-bottom: 8px;
+}
+
+.dashboard-pick h2 {
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+
+.dashboard-pick .card-meta {
+  color: #cfc7bd;
+  line-height: 1.5;
+}
+
+#geniePickNotes {
+  color: #cfc7bd;
+  line-height: 1.6;
+  margin-top: 8px;
+  max-width: 80ch;
+}
+
+.dashboard-pick .tag-row {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dashboard-pick .tag-row:empty {
+  display: none;
+}
+
+.dashboard-page .dashboard-section-heading {
+  margin: 24px 0 16px;
+  gap: 8px;
+}
+
+.dashboard-page .preview-card {
+  overflow-wrap: anywhere;
+}
+
+.dashboard-page :is(a, button):focus-visible {
+  outline: 2px solid #ffb86c;
+  outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .dashboard-page .stats-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .dashboard-page .stat-card {
+    flex: 0 0 auto;
+  }
+
+  .dashboard-pick {
+    padding: 16px;
   }
 }
