@@ -1203,7 +1203,7 @@ a {
   }
 }
 
-/* Dashboard overview: quiet actions and a compact current pick. */
+/* Dashboard overview: compact current pick. */
 .dashboard-page .page-header {
   margin-bottom: 20px;
 }
@@ -1222,31 +1222,6 @@ a {
 
 .dashboard-page .stat-card span {
   font-size: 0.8rem;
-}
-
-.dashboard-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.dashboard-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 10px 16px;
-  border: 1px solid #403a4f;
-  border-radius: 14px;
-  color: #cfc7bd;
-  font-size: 0.9rem;
-  font-weight: 700;
-}
-
-.dashboard-action:hover {
-  background: #211f2d;
-  color: #f8f4ec;
 }
 
 .dashboard-pick {
@@ -1314,5 +1289,131 @@ a {
 
   .dashboard-pick {
     padding: 16px;
+  }
+}
+
+/* Shared signed-in navigation. */
+.app-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+}
+
+.app-nav .logo {
+  flex-shrink: 0;
+}
+
+.site-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 20px;
+}
+
+.app-nav .nav-links {
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+}
+
+.app-nav .nav-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.app-nav [aria-current="page"] {
+  color: #ffb86c;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.app-nav .auth-btn {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.nav-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #403a4f;
+  border-radius: 10px;
+  background: transparent;
+  color: #f8f4ec;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.app-nav :is(a, button):focus-visible {
+  outline: 2px solid #ffb86c;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .app-nav {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .nav-menu-toggle {
+    display: inline-flex;
+  }
+
+  .site-menu {
+    display: none;
+    flex: 0 0 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #342f43;
+    border-radius: 14px;
+    background: #1a1724;
+  }
+
+  .nav-menu-toggle[aria-expanded="true"] + .site-menu {
+    display: flex;
+  }
+
+  .app-nav .nav-links {
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+  }
+
+  .app-nav .nav-links a {
+    flex: none;
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: left;
+  }
+
+  .app-nav .nav-links a:hover {
+    background: #211f2d;
+  }
+
+  .app-nav .auth-area {
+    width: 100%;
+    justify-content: space-between;
+    padding: 12px 0 0;
+    border: 0;
+    border-top: 1px solid #403a4f;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .app-nav .auth-user {
+    flex: 1;
+    max-width: none;
   }
 }
