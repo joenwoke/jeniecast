@@ -8,15 +8,19 @@
 </head>
 <body>
   <header class="site-header protected-content" hidden>
-    <nav class="nav">
+    <nav class="nav app-nav" aria-label="Main navigation">
       <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
-
-      <div class="nav-links">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="vault.html">Movie Vault</a>
+      <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="siteMenu" aria-label="Open navigation menu">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <div id="siteMenu" class="site-menu">
+        <div class="nav-links">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="vault.html">Movie Vault</a>
+          <a href="add.html" aria-current="page">Add Watch</a>
+        </div>
+        <div id="authArea" class="auth-area"></div>
       </div>
-
-      <div id="authArea" class="auth-area"></div>
     </nav>
   </header>
 
@@ -69,6 +73,7 @@
     </form>
   </main>
 
+  <script type="module" src="js/navigation.js"></script>
   <script type="module" src="js/add.js"></script>
 </body>
 </html>
