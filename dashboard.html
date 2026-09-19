@@ -8,15 +8,19 @@
 </head>
 <body class="dashboard-page">
   <header class="site-header protected-content" hidden>
-    <nav class="nav">
+    <nav class="nav app-nav" aria-label="Main navigation">
       <a href="index.html" class="logo"><span class="logo-accent">J</span>e<span class="logo-accent">N</span>ieCast</a>
-
-      <div class="nav-links">
-        <a href="vault.html">Movie Vault</a>
-        <a href="add.html">Add Watch</a>
+      <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="siteMenu" aria-label="Open navigation menu">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <div id="siteMenu" class="site-menu">
+        <div class="nav-links">
+          <a href="dashboard.html" aria-current="page">Dashboard</a>
+          <a href="vault.html">Movie Vault</a>
+          <a href="add.html">Add Watch</a>
+        </div>
+        <div id="authArea" class="auth-area"></div>
       </div>
-
-      <div id="authArea" class="auth-area"></div>
     </nav>
   </header>
 
@@ -29,11 +33,6 @@
     </section>
 
     <section id="dashboardStats" class="stats-row" aria-label="Watchlist stats"></section>
-
-    <nav class="dashboard-actions" aria-label="Watchlist actions">
-      <a href="add.html" class="dashboard-action">Add Watch</a>
-      <a href="vault.html" class="dashboard-action">Open Movie Vault</a>
-    </nav>
 
     <section class="dashboard-pick" aria-labelledby="geniePickLabel">
       <p id="geniePickLabel" class="card-label">Genie's Current Pick</p>
@@ -53,6 +52,7 @@
     <section id="recentWatchGrid" class="grid recent-grid"></section>
   </main>
 
+  <script type="module" src="js/navigation.js"></script>
   <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
